@@ -1,0 +1,2 @@
+module StudentsTableHelper
+end

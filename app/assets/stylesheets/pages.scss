@@ -1,0 +1,98 @@
+// Place all the styles related to the pages controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+.waitpage h2 {
+  text-align: center;
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+
+.Foundation-form h2 {
+  text-align: center;
+  margin-top: 25px;
+  margin-bottom: 50px;
+}
+
+.Foundation-form .FoundationForm-root-21 {
+  margin: auto;
+}
+
+.Foundation-form form {
+  margin: auto;
+  margin-top: 5%;
+}
+
+
+.Foundation-form .MuiFormControl-marginNormal-126 {
+  margin-left: 0;
+  margin-top: 15%;
+  margin-bottom: 0;
+}
+
+.Foundation-form .Apply-textField-222 {
+  width: 100%;
+  margin-top: 0;
+  margin-bottom: 5%;
+} 
+.ManagerDashboard {
+  width: 100%;
+  margin-left: 0px !important;
+  min-height: 100%;
+  height: 926px;
+}
+.StudentsTable .MuiPaper-elevation2-28{
+  min-height: 100%
+}
+
+.ManagerDashboard .MenuList {
+  padding-left: 0px !important;
+  min-width: 180px;
+}
+
+.ManagerDashboard .spinner-border {
+  margin-left: 20px;
+  border-width: 3px !important;
+}
+
+.Invite-form .MuiDialog-paperWidthSm-13 {
+  width: 50%;
+  text-align: center;
+  max-width: 800px;
+}
+
+.Invite-form .form-group {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.StudentsTable {
+  padding-right: 0px !important;
+  padding-left: 0px !important;
+}
+
+.btn-file {
+  position: relative;
+  overflow: hidden;
+  height: 48px;
+}
+
+.btn-file input[type=file] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 100%;
+  min-height: 100%;
+  font-size: 100px;
+  text-align: right;
+  filter: alpha(opacity=0);
+  opacity: 0;
+  outline: none;
+  background: white;
+  cursor: inherit;
+  display: none;
+}
+
+.Tip {
+  font-size: 10px;
+}

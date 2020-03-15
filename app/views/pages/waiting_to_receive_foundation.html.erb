@@ -1,0 +1,12 @@
+<div class='container waitpage' >
+  <h2>The administrator has removed you from the foundation!</h2>
+  <div class="alert alert-danger" role="alert">
+    Write in support to get the reason for deletion or write about the desire to be a manager of the foundation.
+  </div>
+</div>
+<%= react_component('IndexPage', 
+  { 
+    foundations: @foundations,
+    current_user: current_user
+  })
+%>

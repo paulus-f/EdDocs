@@ -1,0 +1,87 @@
+// Place all the styles related to the courses controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+.Levels-select {
+  min-width: 200px;
+  margin-right: auto;
+  margin-top: 27px !important;
+}
+
+.Pagination {
+  display: flex
+}
+
+.Pagination div {
+  margin-left:auto;
+}
+
+.courses-header {
+  margin-bottom: 3%;
+  margin-top: 20px;
+  margin-left: 20px;
+}
+
+.Course-title {
+  max-width: 10% !important;
+  min-width: 200px;
+}
+
+.HeaderCard {
+  padding: 4px !important;
+  text-align: center;
+}
+
+.AddButton {
+  max-width: 10% !important;
+}
+
+.courses-header h3{
+  margin-left: 30px;
+  margin-bottom: 0px;
+  margin-top: 20px;
+
+}
+
+.Levels-courses {
+  margin: 100px !important;
+  margin-top: 50px !important;
+  margin-bottom: 0px;
+}
+
+.course-card .MuiTypography-headline-94 {
+  font-size: 20px;
+  text-align: center;
+  line-height: 5px;
+}
+
+.course-card {
+  min-width: 300px !important;
+  margin-top: 30px;
+}
+
+.CourseForm {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 600px;
+}
+
+.CourseForm .MultilineDesc {
+ margin-top: 5%;
+}
+
+.CourseForm .FirstGroup {
+  width: 50%;
+}
+
+.CourseForm h3 {
+  margin-top: 20px;
+  margin-bottom: 25px;
+}
+
+.Dowload {
+  width: 100%;
+}
+
+.Delete {
+  width: 100%;
+}

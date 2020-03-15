@@ -1,0 +1,3 @@
+<h2>Hello!</h2>
+<h3> Confirm that <%=@parent_email %> is your parent </h3>
+<%= link_to "Confirm ", confirm_parent_url(parent_email: @parent_email, student_email: @student_email)%>

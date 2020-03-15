@@ -1,0 +1,58 @@
+// Place all the styles related to the Levels controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+.LevelsPanel {
+  width: 100%;
+}
+
+.Tools {
+  display: flex;
+  flex-direction: column;
+  margin-right: 10%;
+}
+
+.Levels {
+  margin-bottom: 150px;
+}
+
+.RightPanel {
+  max-width: 30% !important;
+}
+
+.TemplateForm h5 {
+  margin-left: 10%;
+  margin-right: auto;
+  margin-top: 20px;
+}
+.TemplateGroup {
+  margin-left: 10%;
+  margin-right: auto;
+}
+
+.TemplateGroup .NumberField {
+  width: 35%;
+  margin-left: auto;
+}
+
+.StudentsWithoutGroupsList {
+  margin-top: 25px;
+  margin-left: 2%;
+  margin-right: auto;
+  width: 20%;
+  position: fixed;
+}
+
+.StudentsWithoutGroupsList .EnrollSelectForm {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 20px;
+}
+
+.StudentsWithoutGroupsList .EnrollSelect {
+  min-width: 120px;
+  margin-right: auto;
+}
+
+.StudentsWithoutGroupsList .EnrollButton button {
+  height: 100%;
+}

@@ -1,0 +1,51 @@
+<div id="page-wrap">
+    <div id="contact-info" class="vcard">
+        <h2>
+          Certificate from foundatation of '<%= @foundation.name%>'
+        </h2>
+        <h1 class="fn"> <%= @certificate.header %> </h1>
+        <p>
+            Email: <a class="email" href="mailto: <%= current_user.email %>"><%= current_user.email %> </a>
+        </p>
+        <% if current_user.student?%>
+        <p>
+            Dear <%= @profile.first_name%> <%= @profile.last_name %>
+        </p>
+        <% end %>
+    </div>
+    <div class="clear"></div>
+    
+    <dl>
+        <dd class="clear"></dd>
+        <% if current_user.admin? or current_user.manager?%>
+          <dt>Message</dt>
+          <dd id="pic">
+            <%= @certificate.message %> 
+            <table>
+            <% @profiles.each do |profile| %>
+              <tr>
+                <td> Name: <%= profile.first_name%> <%= profile.last_name %> </td>
+              </td>
+            <% end %>
+            </table>
+          </dd>
+        <% end %>
+        <% if current_user.student?%>
+          <dt>Message</dt>
+          <dd id ="pic">
+            <p>
+              <%= @certificate.message %>
+            </p>
+          </dd>
+        <% end %>
+        <dd class="clear"></dd>
+
+        <dt>Foundation</dt>
+        <dd id ="pic">
+            <p>
+              <strong>Type:</strong> <%= @foundation.type_foundation %><br />
+              <strong>Level:</strong> <%= @certificate.level.name %><br />
+            </p>
+        </dd>
+        <dd class="clear"></dd>
+</div>

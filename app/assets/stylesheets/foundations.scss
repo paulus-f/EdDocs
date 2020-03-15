@@ -1,0 +1,22 @@
+// Place all the styles related to the foundations controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+.IndexPage .IndexPageTitle h2 {
+  text-align: left;
+  width: 450px;
+  margin-left: auto;
+  margin-top: 20px;
+}
+
+.IndexPage .IndexPageSelect {
+  margin-top: 10px;
+  min-width: 150px;
+}
+
+.IndexPage .IndexPagePagination {
+  margin-top: 20px;
+}
+
+.FoundationInfoBlock h6{
+  text-align: left;
+}

@@ -1,0 +1,9 @@
+<%= react_component('FoundationEditForm', 
+  { 
+    current_user: current_user, 
+    foundation: @foundation, 
+    end_date: @end_date,
+    begin_date: @begin_date, 
+    image_url: @image,
+    image_not_found: asset_url('not_found_foundation_image')
+  }) %>

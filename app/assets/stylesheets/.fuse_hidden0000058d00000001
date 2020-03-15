@@ -1,0 +1,110 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's
+ * vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ 
+ */
+ @import "bootstrap";
+
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+}
+fieldset .Radio {
+   width: 100%;
+   margin-left: 5%;
+ }
+
+.support {
+   cursor: pointer;
+   margin-top: 3.5%;
+   margin-bottom: 3.5%;
+   color: white !important;
+   font-size: 15px;
+	 font-weight: 700;
+	 border: 1px solid white;
+	 padding: 10px 10px;
+	 padding-bottom: 12px;
+	 border-radius: 5px;
+ }
+
+.Auth {
+	padding: 1%;
+	a:link {
+	  color: white ; 
+	  width: auto ;
+	  text-decoration: none ;
+	 	margin-right: 10px;
+	 	font-size: 15px;
+	 	font-weight: 700;
+	 	border: 1px solid white;
+	 	padding: 10px 10px;
+	 	border-radius: 5px;
+	}
+	a:visited {
+	  color: white;
+	  width: auto;
+	  text-decoration: none;
+	 	font-weight: 700;
+	}
+	a:hover {
+	  color: white; 
+	  width: auto;
+	  text-decoration: none;
+	 	font-weight: 700;
+	}
+	a:active {
+	  color: white; 
+	  width: auto;
+	  text-decoration: none;
+	 	font-weight: 700;
+	}
+}
+
+.Home {
+	a:link {
+	  color: white !important; 
+	  text-decoration: none !important;
+	  font-size: 25px !important;
+	}
+	a:visited {
+	  color: white !important;
+	  width: auto !important;
+	  text-decoration: none !important;
+	}
+	a:hover {
+	  color: white !important; 
+	  width: auto !important;
+	  text-decoration: none !important;
+	}
+	a:active {
+	  color: white !important; 
+	  width: auto !important;
+	  text-decoration: none !important;
+	}
+}
+
+.log_out {
+	margin-bottom: 3.5%; 
+	margin-top: 3.5%;
+	background-color: transparent !important;
+	font-size: 15px !important;
+	border: 1px solid white !important;
+	font-weight: 700 !important;
+	color: white !important;
+	text-transform: none !important;
+	padding-top: 7.5% !important;
+}

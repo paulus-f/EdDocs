@@ -1,0 +1,12 @@
+<h2>Hello!</h2>
+<p>Respected <%= @student.profile.first_name %> <%=@student.profile.last_name%>...</p>
+<p>Foundation <%= @foundation.name %> invite you to join to website <b>ScoolDocs</b>!!!</p>
+  <%if @group%>
+    <p>You will be enroll to group <%= @group.name %></p>
+  <% end %>
+<% if @password%> 
+<p>You don't need to register in system, just follow the link and sing in with this email and your secret password - <b><%= @password %></b></p>
+<% else %>
+<p>Follow the link for join us!</p>
+<% end %>
+<%= link_to "Join us", student_approve_url(jwt: @JWT)%>

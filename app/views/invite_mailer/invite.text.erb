@@ -1,0 +1,12 @@
+Hello!
+Respected <%= @student.profile.first_name %> <%=@student.profile.last_name%>...
+Foundation <%= @foundation.name %> invite you to join to website ScoolDocs!!!
+  <%if @group%>
+    You will be enroll to group <%= @group.name %>
+  <% end %>
+<% if @password%> 
+You don't need to register in system, just follow the link and sing in with this email and your secret password - <%= @password %>
+<% else %>
+Follow the link for join us!
+<% end %>
+<%= student_approve_url(jwt: @JWT)%>
