@@ -17,11 +17,12 @@ services:
     env_file: .env
     environment:
       RAILS_ENV: development
-
+      RAILS_MAX_THREADS: 5
   database:
     image: postgres
     restart: always
     environment:
+      - POSTGRES_USER
       - POSTGRES_PASSWORD
     volumes:
       - db_data:/var/lib/postgresql/data

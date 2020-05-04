@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :admin, class: User do
     email { Faker::Internet.unique.email }
-    password { '11111111' }
+    password { 'password' }
     role { 'admin' }
     approve { true }
     confirmed_at { DateTime.now }
@@ -9,7 +9,7 @@ FactoryBot.define do
 
   factory :manager, class: User do
     email { Faker::Internet.unique.email }
-    password { '11111111' }
+    password { 'password' }
     role { 'manager' }
     approve { true }
     confirmed_at { DateTime.now }
@@ -17,14 +17,14 @@ FactoryBot.define do
 
   factory :parent, class: User do
     email { Faker::Internet.unique.email }
-    password { '11111111' }
+    password { 'password' }
     role { 'parent' }
     confirmed_at { DateTime.now }
   end
 
   factory :student, class: User do
     email { Faker::Internet.unique.email }
-    password { '11111111' }
+    password { 'password' }
     role { 'student' }
     confirmed_at { DateTime.now }
   end
