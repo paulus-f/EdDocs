@@ -36,7 +36,15 @@ gem 'jbuilder', '~> 2.5'
 # gem 'redis', '~> 4.0'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
-
+gem 'csv'
+gem 'devise'
+gem 'enumerize'
+gem 'jwt'
+gem 'bootstrap'
+gem "paperclip", "~> 6.0.0"
+gem 'aws-sdk-s3'
+gem 'sidekiq'
+gem 'mini_racer'
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 
@@ -48,14 +56,9 @@ gem 'bootsnap', '>= 1.1.0', require: false
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'bootstrap', '~> 4.2.1'
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-  gem 'csv'
-  gem 'devise'
-  gem 'enumerize'
   gem "factory_bot_rails"
   gem 'faker'
-  gem 'jwt'
   gem 'pry'
   gem "paperclip", "~> 6.0.0"
   gem 'rspec-rails', '~> 3.8'
