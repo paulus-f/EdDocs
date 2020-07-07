@@ -74,7 +74,3 @@ yarn-debug.log*
 
 # Ignore master key for decrypting credentials and more.
 
-# Elastic Beanstalk Files
-.elasticbeanstalk/*
-!.elasticbeanstalk/*.cfg.yml
-!.elasticbeanstalk/*.global.yml
