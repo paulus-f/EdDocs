@@ -209,7 +209,7 @@ class PrimarySearchAppBar extends React.Component {
               color="inherit"
               noWrap>
               <div className="Home">
-                <a href="http://localhost:3000/">SchoolDocs</a>
+                <a href="/">EdDocs</a>
               </div>
             </Typography>
             <div className={classes.search}>

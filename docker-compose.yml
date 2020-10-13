@@ -1,35 +1,15 @@
-version: '3.4'
+version: "3.4"
 
 services:
-  app: 
-    build:
-      context: .
-      dockerfile: Dockerfile
-    depends_on:     
-      - database
-      - redis
-    ports: 
-      - "3000:3000"
-    volumes:
-      - .:/app
-      - gem_cache:/usr/local/bundle/gems
-      - node_modules:/app/node_modules
-    env_file: .env
-    environment:
-      RAILS_ENV: development
-      RAILS_MAX_THREADS: 5
   database:
     image: postgres
-    restart: always
     environment:
-      - POSTGRES_USER
-      - POSTGRES_PASSWORD
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
     volumes:
       - db_data:/var/lib/postgresql/data
-
   redis:
     image: redis:5.0.7
-
   sidekiq:
     build:
       context: .
@@ -38,16 +18,30 @@ services:
       - app      
       - database
       - redis
+    command: "bundle exec sidekiq"
     volumes:
       - .:/app
-      - gem_cache:/usr/local/bundle/gems
-      - node_modules:/app/node_modules
+    environment:
+      RAILS_ENV: "development"
+      REDIS_URL: "redis://redis:6379/12"
+    depends_on:
+      - redis
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - database
+      - redis
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
     env_file: .env
     environment:
       RAILS_ENV: development
-    entrypoint: ./entrypoints/sidekiq-entrypoint.sh
-
+      RAILS_MAX_THREADS: 5
 volumes:
-  gem_cache:
+  redis:
   db_data:
-  node_modules:     
+  postgres:

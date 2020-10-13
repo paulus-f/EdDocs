@@ -29,19 +29,24 @@ RUN apk add --update --no-cache \
       yarn 
 
 RUN gem install bundler -v 2.0.2
-
+RUN mkdir /app
 WORKDIR /app
 
 COPY Gemfile Gemfile.lock ./
-
-RUN bundle config build.nokogiri --use-system-libraries
-
-RUN bundle check || bundle install 
-
+RUN bundle check || bundle install
 COPY package.json yarn.lock ./
+
+# RUN gem install bundler -v 2.0.2
+# WORKDIR /app
+# COPY Gemfile Gemfile.lock ./
+# RUN bundle config build.nokogiri --use-system-libraries
+# RUN bundle check || bundle install 
+# COPY package.json yarn.lock ./
 
 RUN yarn install --check-files
 
 COPY . ./ 
 
+COPY ./entrypoints/docker-entrypoint.sh /
+RUN chmod +x ./entrypoints/docker-entrypoint.sh
 ENTRYPOINT ["./entrypoints/docker-entrypoint.sh"]

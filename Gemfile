@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.5.8'
+ruby '2.5.1'
 
 gem 'cancancan', '~> 2.0'
 gem 'webpacker'
@@ -44,7 +44,8 @@ gem 'bootstrap'
 gem "paperclip", "~> 6.0.0"
 gem 'aws-sdk-s3'
 gem 'sidekiq'
-gem 'mini_racer'
+#gem 'mini_racer'
+gem 'searchkick'
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 
@@ -60,11 +61,8 @@ group :development, :test do
   gem "factory_bot_rails"
   gem 'faker'
   gem 'pry'
-  gem "paperclip", "~> 6.0.0"
   gem 'rspec-rails', '~> 3.8'
   gem 'rubocop', require: false
-  gem 'searchkick'
-  gem 'sidekiq'
 end
 
 group :development do
