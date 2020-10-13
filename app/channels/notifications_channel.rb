@@ -8,5 +8,5 @@ class NotificationsChannel < ApplicationCable::Channel
   def unsubscribed
     stop_all_streams
   end 
-
 end
+

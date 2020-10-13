@@ -2,10 +2,11 @@
 
 set -e
 
-until nc -z -v -w30 $POSTGRES_HOST $POSTGRES_PORT; do
- echo 'Waiting for POSTGRES...'
- sleep 1
-done
+#until nc -z -v -w30 $POSTGRES_HOST $POSTGRES_PORT; do
+# echo 'Waiting for POSTGRES...'
+# sleep 1
+#done
+
 echo "POSTGRES is up and running!"
 
 if bundle exec rake db:migrate 2>/dev/null; then

@@ -1,6 +1,23 @@
 version: "3.4"
 
 services:
+  sidekiq:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - app
+      - database
+      - redis
+    volumes:
+      - .:/app
+      - gem_cache:/usr/local/bundle/gems
+      - node_modules:/app/node_modules
+    env_file: .env
+    environment:
+      RAILS_ENV: development
+    entrypoint: ./entrypoints/sidekiq-entrypoint.sh
+
   database:
     image: postgres
     environment:
@@ -10,22 +27,7 @@ services:
       - db_data:/var/lib/postgresql/data
   redis:
     image: redis:5.0.7
-  sidekiq:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    depends_on:
-      - app      
-      - database
-      - redis
-    command: "bundle exec sidekiq"
-    volumes:
-      - .:/app
-    environment:
-      RAILS_ENV: "development"
-      REDIS_URL: "redis://redis:6379/12"
-    depends_on:
-      - redis
+
   app:
     build:
       context: .
@@ -45,3 +47,5 @@ volumes:
   redis:
   db_data:
   postgres:
+  gem_cache:
+  node_modules:
