@@ -3,9 +3,11 @@ class RegistrationsController < Devise::RegistrationsController
   NEWFOUNDATION = 'Create New Foundation'
   CNF = 'CNF'
 
-   def create
+  def create
     build_resource(sign_up_params)
     resource.save
+    return render json: { message: resource_error_messages  } if resource.errors.present?
+
     resource.profile.update(profile_up_params)
     create_foundation(resource) if resource.role == 'manager'
     check_student(params, resource) if resource.role == 'parent'
@@ -15,8 +17,7 @@ class RegistrationsController < Devise::RegistrationsController
         set_flash_message :notice, :signed_up if is_flashing_format?
         msg = find_message(:signed_up, {})
         sign_up(resource_name, resource)
-        redirect_to :root
-        return
+        return redirect_to :root
       else
         set_flash_message :notice, :"signed_up_but_#{resource.inactive_message}" if is_flashing_format?
         msg = find_message(:"signed_up_but_#{resource.inactive_message}", {})
@@ -25,9 +26,8 @@ class RegistrationsController < Devise::RegistrationsController
       end
     else
       clean_up_passwords resource
-      msg = ""
-      resource.errors.full_messages.each{ |message| msg += message }
-      render json: {message: msg}
+
+      render json: { message: resource_error_messages }
     end
   end
 
@@ -57,6 +57,10 @@ class RegistrationsController < Devise::RegistrationsController
   end
    
   private
+
+  def resource_error_messages
+    resource.errors.full_messages.join(',')
+  end
   
   def create_foundation(resource)
     if NEWFOUNDATION == params.require(:foundation)[:name]
@@ -83,7 +87,13 @@ class RegistrationsController < Devise::RegistrationsController
     else
       if params[:student][:student_email] != current_user 
         @foundation = Foundation.find_by(name: params.require(:foundation)[:name])
-        CreateStudent.perform(resource,params[:student][:student_email], @foundation)
+        CreateStudent.perform(
+          parent: resource, 
+          student_email: params[:student][:student_email], 
+          first_name: params[:profile][:first_name],
+          last_name: params[:profile][:last_name],
+          foundation: @foundation
+        )
       else
         render json: {message: 'The email of student equals to parent email'}
         return

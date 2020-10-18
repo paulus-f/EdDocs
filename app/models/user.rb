@@ -18,6 +18,7 @@ class User < ApplicationRecord
   has_many :jwt_tokens, dependent: :destroy
   belongs_to :parent, polymorphic: true, optional: true
   has_many :children, class_name: 'User', as: :parent, dependent: :nullify
+  
   def manager?
     role == 'manager'
   end
@@ -41,3 +42,4 @@ class User < ApplicationRecord
   has_many :messages
   has_many :conversations, foreign_key: :sender_id
 end
+

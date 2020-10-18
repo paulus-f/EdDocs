@@ -11,7 +11,7 @@ import SignUp from './SignUp';
 const styles = {
   root: {
     marginLeft: '15%',
-    marginRight: '40%',
+    marginRight: '50%',
     width: '70%',
   },
 };
@@ -37,11 +37,6 @@ class Auth extends React.Component {
       title: links[0].label
     };
   }
- 
-  componentDidUpdate()
-  {
-  }
-
 
   handleChange = (event, value) => {
     this.setState({ value });
@@ -67,6 +62,7 @@ class Auth extends React.Component {
           value={value}
           onChange={this.handleChange}
           showLabels
+          style={{marginRight: 300}}
         >
           <BottomNavigationAction label={links[0].label} icon={<AccountCircle />} />
           <BottomNavigationAction label={links[1].label} icon={<PersonAdd />} />

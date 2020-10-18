@@ -1,6 +1,6 @@
 class CreateStudent
   class << self 
-    def perform(parent, student_email, first_name, last_name, foundation)
+    def perform(parent:, student_email:, first_name:, last_name:, foundation:)
       if student_email != parent.email 
         @foundation = foundation
         @password = Devise.friendly_token
@@ -13,7 +13,7 @@ class CreateStudent
         PasswordWorker.perform_async(@student.email, @password)
         @student.parent = parent
         parent.children << @student
-        return @student
+        parent.save
       end
       nil
     end

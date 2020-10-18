@@ -8,3 +8,4 @@ class ApprovingMailer < ApplicationMailer
     mail(subject: @message, from: ADMIN_ADDRESS, to: user_email)
   end
 end
+

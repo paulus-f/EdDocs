@@ -1,7 +1,6 @@
 class SupportMailer < ApplicationMailer
-  SUPPORT_ADDRESS = 'deamteamrubylab@gmail.com'
+  SUPPORT_ADDRESS = 'rubydreamteam@gmail.com'
   default to: SUPPORT_ADDRESS, from: SUPPORT_ADDRESS
-
 
   def message_to_support(message)
     @message = message

@@ -16,7 +16,7 @@ class InviteMailer < ApplicationMailer
   def send_password(student_email, password)
     @password = password
     mail(
-      subject: 'Registration on Schooldocs',
+      subject: 'Registration on EdDocs', 
       to: "#{student_email}"
     )
   end

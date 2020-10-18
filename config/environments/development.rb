@@ -63,17 +63,15 @@ Rails.application.configure do
   config.active_job.queue_adapter = :sidekiq
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
   config.action_mailer.default_url_options = { host: 'localhost:3000' }
-  config.action_mailer.perform_deliveries = true
-  config.action_mailer.raise_delivery_errors = true
-  config.action_mailer.delivery_method = :letter_opener
+  config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    user_name: ENV['user_name'],
-    password:  ENV['password'],
-    domain:    ENV['domain'],
-    address:   ENV['address'],
-    port:      ENV['port'],
-    authentication: :plain,
-    enable_starttls_auto: true
+    user_name:            ENV['EMAIL_USER'],
+    password:             ENV['EMAIL_PASSWORD'],
+    address:              ENV['EMAIL_ADDRESS'],
+    port:                 ENV['EMAIL_PORT'],
+    domain:               ENV['EMAIL_DOMAIN'],
+    authentication:       ENV['EMAIL_AUTHENTICATIO'],
+    enable_starttls_auto: true 
   }
 
   # config.after_initialize do
