@@ -8,15 +8,15 @@ class PagesController < ApplicationController
       if current_user.admin?
         @users = User.all.to_json
         @foundations = @foundations.to_json(include: %i[managers students])
-        render 'admin_dashboard'
-        return
+        return render 'admin_dashboard'
       end
+
       unless current_user.approve
         @foundations = GetUrlAndObjectFoundationService.get(@foundations).to_json
-        waiting_manager_page if current_user.manager?
-        render 'waiting_page' if current_user.student?
-        waiting_parent_page if current_user.parent?
-        return
+
+        return waiting_parent_or_student_page if current_user.parent?
+        return waiting_manager_page if current_user.manager?
+        return render 'waiting_page' if current_user.student?
       else
         if current_user.manager?
           @foundation = current_user.foundation
@@ -28,10 +28,12 @@ class PagesController < ApplicationController
           end
           return
         end
-        if current_user.parent? or current_user.student?
-          render 'profile_dashboard'
-          return
-        end
+        
+        binding.pry
+        
+        return waiting_parent_or_student_page if current_user.university_student? && !current_user.enrollment_form
+
+        return render 'profile_dashboard' if current_user.parent? || current_user.student?
       end
     end
     @foundations = GetUrlAndObjectFoundationService.get(@foundations).to_json
@@ -48,23 +50,25 @@ class PagesController < ApplicationController
   end
 
   def support
-    @message = (params.require(:message).permit!).to_h
+    @message = params.require(:message).permit!.to_h
     SupportWorker.perform_async(@message)
     head :no_content
   end
 
   private
-    def waiting_manager_page
-      return render 'waiting_page' if current_user.foundation.nil?
-      current_user.foundation.address ? (render 'waiting_page') : (render 'foundation_form')
-    end
 
-    def waiting_parent_page
-      @children_profile = current_user.children[0].profile
-      current_user.enrollment_form ? (render 'waiting_page') : (render 'registration_children')
-    end
+  def waiting_manager_page
+    return render 'waiting_page' if current_user.foundation.nil?
 
-    def foundation_is_nil
-      render 'waiting_to_receive_foundation'
-    end
+    current_user.foundation.address ? (render 'waiting_page') : (render 'foundation_form')
+  end
+
+  def waiting_parent_or_student_page
+    @children_profile = current_user.university_student? ? current_user.profile : current_user.children[0].profile
+    current_user.enrollment_form ? (render 'waiting_page') : (render 'registration_children')
+  end
+
+  def foundation_is_nil
+    render 'waiting_to_receive_foundation'
+  end
 end

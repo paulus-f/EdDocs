@@ -35,8 +35,8 @@ const styles = theme => ({
 });
 
 class SignUp extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleClose = this.handleClose.bind(this);
@@ -146,7 +146,7 @@ class SignUp extends React.Component {
           alert: res.data.message,
           open: true
         })
-        if(this.state.alert == null)
+        if(res.data.message == 'Complete')
         {
           window.location.reload()
         }

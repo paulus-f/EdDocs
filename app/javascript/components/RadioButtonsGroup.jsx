@@ -6,10 +6,11 @@ import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import FormParent from './FormParent';
 import FormAdmin from './FormAdmin';
+import FormStudent from './FormStudent';
 
 class FormControlLabelPosition extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.updateFirstName = this.updateFirstName.bind(this);
     this.updateLastName = this.updateLastName.bind(this);
     this.updateStudentEmail = this.updateStudentEmail.bind(this);
@@ -73,7 +74,17 @@ class FormControlLabelPosition extends React.Component {
           updateFoundationLvl = {this.updateFoundationLvl}
           updateFoundationName = {this.updateFoundationName}
           updateFoundationType = {this.updateFoundationType}
-        /> 
+        />
+        break;
+      case 'student':
+        userForm = <FormStudent
+          updateFirstName = {this.updateFirstName}  
+          updateLastName = {this.updateLastName}
+          updateStudentEmail = {this.updateStudentEmail}
+          updateFoundationLvl = {this.updateFoundationLvl}
+          updateFoundationName = {this.updateFoundationName}
+          updateFoundationType = {this.updateFoundationType}
+        />
         break;
     }
     return (
@@ -97,6 +108,12 @@ class FormControlLabelPosition extends React.Component {
               value="manager"
               control={<Radio color="primary" />}
               label="Manager"
+              labelPlacement="end"
+            />
+            <FormControlLabel
+              value="student"
+              control={<Radio color="primary" />}
+              label="Student"
               labelPlacement="end"
             />
           </RadioGroup>

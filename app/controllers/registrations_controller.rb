@@ -1,28 +1,33 @@
 class RegistrationsController < Devise::RegistrationsController
   respond_to :json
-  NEWFOUNDATION = 'Create New Foundation'
-  CNF = 'CNF'
+
+  NEWFOUNDATION = 'Create New Foundation'.freeze
+  CNF = 'CNF'.freeze
 
   def create
     build_resource(sign_up_params)
     resource.save
-    return render json: { message: resource_error_messages  } if resource.errors.present?
+    return render json: { message: resource_error_messages } if resource.errors.present?
 
     resource.profile.update(profile_up_params)
     create_foundation(resource) if resource.role == 'manager'
     check_student(params, resource) if resource.role == 'parent'
+    create_university_student(resource) if resource.role == 'student'
+
     yield resource if block_given?
+
     if resource.persisted?
       if resource.active_for_authentication?
         set_flash_message :notice, :signed_up if is_flashing_format?
-        msg = find_message(:signed_up, {})
         sign_up(resource_name, resource)
-        return redirect_to :root
+
+        render json: { message: 'Complete' }
       else
         set_flash_message :notice, :"signed_up_but_#{resource.inactive_message}" if is_flashing_format?
         msg = find_message(:"signed_up_but_#{resource.inactive_message}", {})
         expire_data_after_sign_in!
-        render json: {message: msg}, status: 200
+
+        render json: { message: msg }, status: 200
       end
     else
       clean_up_passwords resource
@@ -37,31 +42,32 @@ class RegistrationsController < Devise::RegistrationsController
     users = User.where(id: users_id)
     users.each do |user|
       user.update_attribute(:approve, true)
-      AdminMessageWorker.perform_async(@message, user.email) 
+      AdminMessageWorker.perform_async(@message, user.email)
     end
-    render json: { message: "Complete" }, status: 200
+
+    render json: { message: 'Complete' }, status: 200
   end
- 
+
   def delete_users
     users_id = params[:users_id]
     @message = params[:message]
     users = User.where(id: users_id)
     users.each do |user|
       AdminMessageWorker.perform_async(@message, user.email)
-      if(user.profile)
+      if user.profile
         user.profile.allergy.destroy
       end
       user.destroy
     end
-    render json:  {message: "Complete"}, status: 200
+    render json: { message: 'Complete' }, status: 200
   end
-   
+
   private
 
   def resource_error_messages
     resource.errors.full_messages.join(',')
   end
-  
+
   def create_foundation(resource)
     if NEWFOUNDATION == params.require(:foundation)[:name]
       @foundation = Foundation.new(foundation_up_params)
@@ -76,36 +82,46 @@ class RegistrationsController < Devise::RegistrationsController
 
   def check_student(params, resource)
     @student = User.find_by(email: params[:student][:student_email])
-    if @student
-      unless @student.parent.nil?
-        render json: {message: 'The student already has a parent'}
-        return 
-      else
-        resource.children << @student
-        @student.parent = resource
-      end
+    return create_student(parent: resource) if params[:student][:student_email] && @student.nil?
+
+    if @student&.parent.nil?
+      resource.children << @student
+      @student.parent = resource
     else
-      if params[:student][:student_email] != current_user 
-        @foundation = Foundation.find_by(name: params.require(:foundation)[:name])
-        CreateStudent.perform(
-          parent: resource, 
-          student_email: params[:student][:student_email], 
-          first_name: params[:profile][:first_name],
-          last_name: params[:profile][:last_name],
-          foundation: @foundation
-        )
-      else
-        render json: {message: 'The email of student equals to parent email'}
-        return
-      end
+      return render json: { message: 'The student already has a parent' }
     end
+  end
+
+  def create_university_student(resource)
+    # <ActionController::Parameters {"user"=><ActionController::Parameters 
+    #{"email"=>"fed@fed.qwe", "password"=>"qwe123", "password_confirmation"=>"qwe123", "role"=>"student"} permitted: false>, "profile"=><Actio│:
+    # nController::Parameters {"first_name"=>"edfew", "last_name"=>"gvfds"} permitted: false>, 
+    #"foundation"=>{"type_foundation"=>"university", "name"=>"Unikk"}, "student"=>{"student_email"=>"", "name_foundation"=>"U│ 
+    # nikk"}, "authenticity_token"=>"gtu00QAR5ZYP5z3oW8VE1V+yXwKoziO/Xr/W2CsnJ3XRJ2UCN9UxnvojVmnn5G5gibrsY6MrhgvNC+9qmJPoWg==", 
+    #"controller"=>"registrations", "action"=>"create", "registration"=>{"user"=>{"email"=>"│n
+    # fed@fed.qwe", "password"=>"qwe123", "password_confirmation"=>"qwe123", "role"=>"student"}, 
+    #"profile"=>{"first_name"=>"edfew", "last_name"=>"gvfds"}, "foundation"=>{"type_foundation"=>"university", "name"=>"Uni│i
+    # kk"}, "student"=>{"student_email"=>"", "name_foundation"=>"Unikk"}}} permitted: fals
+    create_student(student: resource)
+  end
+
+  def create_student(parent: nil, student: nil)
+    @foundation = Foundation.find_by(name: params.require(:foundation)[:name])
+    CreateStudent.perform(
+      student: student,
+      parent: parent,
+      student_email: params[:student][:student_email],
+      first_name: params[:profile][:first_name],
+      last_name: params[:profile][:last_name],
+      foundation: @foundation
+    )
   end
 
   def sign_up_params
     params.require(:user).permit(
       :email,
       :role,
-      :password, 
+      :password,
       :password_confirmation
     )
   end
@@ -115,7 +131,8 @@ class RegistrationsController < Devise::RegistrationsController
   end
 
   def foundation_up_params
-    params.require(:foundation).permit(:type_foundation, :name, :end_academic_year, :begin_academic_year)
+    params.require(:foundation).permit(:type_foundation, :name,
+                                       :end_academic_year, :begin_academic_year)
   end
 
   def account_update_params

@@ -17,6 +17,7 @@ class LevelsController < ApplicationController
     render json: @foundation.students.includes(:profile).where(group_id: nil).to_json(include: :profile)
   end
 
+  #TODO uniq foundation name 
   def get_levels
     if params[:levels_by_nf] == 'true'
       @foundation = Foundation.find_by(name: params[:name])

@@ -43,6 +43,8 @@ services:
     environment:
       RAILS_ENV: development
       RAILS_MAX_THREADS: 5
+    tty: true
+    stdin_open: true
 volumes:
   redis:
   db_data:

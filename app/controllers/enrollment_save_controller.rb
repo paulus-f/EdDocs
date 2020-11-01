@@ -88,7 +88,7 @@ class EnrollmentSaveController < ApplicationController
         @times.each_with_index do |time, i|
           @medication = Medication.create(profile: @profile, name: @names[i], time: time, dose: @doses[i] )
           @profile.medication << @medication
-        end        
+        end
         msg = 'Medication was added'
       end
     when 'Signature'
@@ -97,8 +97,7 @@ class EnrollmentSaveController < ApplicationController
         image_base64 = signature_image
         @profile.signature.update_attribute(:signature, image_base64)
         current_user.update_attribute(:enrollment_form, true)
-        render json: { message: "Welcome. Waiting approving" }, status: 200
-        return
+        return render json: { message: 'Welcome. Waiting approving' }, status: 200
       end
     when 'Allergy'
       if @profile.allergy.nil?
