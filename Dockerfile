@@ -26,7 +26,8 @@ RUN apk add --update --no-cache \
       postgresql-dev \
       python \
       tzdata \
-      yarn 
+      yarn \
+      imagemagick
 
 RUN gem install bundler -v 2.0.2
 RUN mkdir /app

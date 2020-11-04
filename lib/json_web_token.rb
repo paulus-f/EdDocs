@@ -5,7 +5,7 @@ class JsonWebToken
 
   def self.decode(token)
     HashWithIndifferentAccess.new(JWT.decode(token, ENV['SECRET_KEY_BASE'])[0])
-  rescue
+  rescue e
     nil
   end
 end

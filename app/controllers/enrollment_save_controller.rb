@@ -10,23 +10,23 @@ class EnrollmentSaveController < ApplicationController
     first_name = params[:first_name]
     last_name = params[:last_name]
     @child = User.find_by(email: email_child)
-    
+
     if @child.nil?
       foundation = Foundation.find_by(name: params[:foundation])
       @child = CreateStudent.perform(current_user, email_child, first_name, last_name, foundation)
-      render json: {message: "Child with email #{@child.email} was created"}, status: 200
+      render json: { message: "Child with email #{@child.email} was created" }, status: 200
     else
       if @child.parent.nil?
         ApproveParentWorker.perform_async(current_user.email, @child.email)
-        render json: {message: "Confirmation on email #{@child.email} was sent"}, status: 200
+        render json: { message: "Confirmation on email #{@child.email} was sent"}, status: 200
       else
-        render json: {message: "Student already has parent. If you have a question, you can contact support!!!"}
+        render json: {message: 'Student already has parent. If you have a question, you can contact support!' }
       end
-    end 
+    end
   end
 
   def get_free_children
-    render json: { children: User.where(role: :student, parent_id: nil)}, status: 200
+    render json: { children: User.where(role: :student, parent_id: nil) }, status: 200
   end
 
   def student_confirm_parent
@@ -55,7 +55,7 @@ class EnrollmentSaveController < ApplicationController
       else
         @profile.general_info.update(general_info_params)
         @profile.update_attributes(
-          first_name: params[:data][:params][:first_name], 
+          first_name: params[:data][:params][:first_name],
           last_name: params[:data][:params][:second_name]
         )
         msg = 'General Info was added'
@@ -86,7 +86,8 @@ class EnrollmentSaveController < ApplicationController
       else
         medication_params
         @times.each_with_index do |time, i|
-          @medication = Medication.create(profile: @profile, name: @names[i], time: time, dose: @doses[i] )
+          @medication = Medication.create(profile: @profile, name: @names[i],
+                                          time: time, dose: @doses[i])
           @profile.medication << @medication
         end
         msg = 'Medication was added'
@@ -104,20 +105,25 @@ class EnrollmentSaveController < ApplicationController
       else
         @profile.allergy.update(allergy_params)
         msg = 'Allergy was added'
-      end  
+      end
     end
 
-    render json: {message: msg}, status: 200 
+    render json: { message: msg }, status: 200
   end
 
   private
 
   def current_profile
-    @profile = current_user.children.find_by(id: params[:student_id]).profile
+    @profile = if current_user.parent?
+                 current_user.children.find_by(id: params[:student_id]).profile
+               else
+                 current_user.profile
+               end
   end
 
   def general_info_params
-    params[:data].require(:params).permit(:first_name, :second_name, :third_name, :birth_date, :hobbie)
+    params[:data].require(:params).permit(:first_name, :second_name,
+                                          :third_name, :birth_date, :hobbie)
   end
 
   def medication_params
@@ -127,19 +133,21 @@ class EnrollmentSaveController < ApplicationController
   end
 
   def questionnaire_params
-    params[:data].require(:params).permit(:sportF, :glasses,:hearing)
+    params[:data].require(:params).permit(:sportF, :glasses, :hearing)
   end
 
   def parent_contact_params
-    params[:data].require(:params).permit(:first_name, :second_name, :third_name, :phone_number)
+    params[:data].require(:params).permit(:first_name, :second_name,
+                                          :third_name, :phone_number)
   end
 
   def emergency_conn_params
-    params[:data].require(:params).permit(:first_name, :second_name, :third_name, :phone_number)
+    params[:data].require(:params).permit(:first_name, :second_name,
+                                          :third_name, :phone_number)
   end
 
   def signature_image
-    Paperclip.io_adapters.for(params[:data][:params][:signature]) 
+    Paperclip.io_adapters.for(params[:data][:params][:signature])
   end
 
   def allergy_params

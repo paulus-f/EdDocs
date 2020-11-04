@@ -1,5 +1,3 @@
 FactoryBot.define do
-  factory :allergy do
-    
-  end
+  factory :allergy
 end

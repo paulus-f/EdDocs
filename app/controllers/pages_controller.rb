@@ -28,9 +28,7 @@ class PagesController < ApplicationController
           end
           return
         end
-        
-        binding.pry
-        
+
         return waiting_parent_or_student_page if current_user.university_student? && !current_user.enrollment_form
 
         return render 'profile_dashboard' if current_user.parent? || current_user.student?
