@@ -17,7 +17,8 @@ services:
     environment:
       RAILS_ENV: development
     entrypoint: ./entrypoints/sidekiq-entrypoint.sh
-
+    tty: true
+    stdin_open: true
   database:
     image: postgres
     environment:

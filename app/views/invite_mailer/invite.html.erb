@@ -1,6 +1,6 @@
 <h2>Hello!</h2>
 <p>Respected <%= @student.profile.first_name %> <%=@student.profile.last_name%>...</p>
-<p>Foundation <%= @foundation.name %> invite you to join to website <b>ScoolDocs</b>!!!</p>
+<p>Foundation <%= @foundation.name %> invite you to join to website <b>EdDocs</b>!!!</p>
   <%if @group%>
     <p>You will be enroll to group <%= @group.name %></p>
   <% end %>
@@ -9,4 +9,4 @@
 <% else %>
 <p>Follow the link for join us!</p>
 <% end %>
-<%= link_to "Join us", student_approve_url(jwt: @JWT)%>
+<%= link_to 'Join us', student_approve_url(jwt: @jwt)%>

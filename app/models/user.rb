@@ -1,6 +1,8 @@
 class User < ApplicationRecord
   extend Enumerize
 
+  CSV_HEADERS = %w[email first_name last_name].freeze
+
   after_create :create_profile
 
   scope :children, -> { where(role: 'student') }

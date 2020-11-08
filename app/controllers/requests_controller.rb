@@ -1,4 +1,5 @@
 class RequestsController < ApplicationController
+
   def create
     Request.create(foundation_id: params[:foundation_id],
                    level_id: params[:level_id],
@@ -16,7 +17,7 @@ class RequestsController < ApplicationController
       request.destroy
     end
   end
-  
+
   def approve
     requests_id = params[:requests_id]
     @message = params[:message]
