@@ -4,21 +4,17 @@ class CertificatesController < ApplicationController
 
   def show
     @foundation = @certificate.foundation
-    if(current_user.admin? or current_user.manager?)
-      @profiles = @certificate.profiles
-    else
-      @profile = @certificate.profiles.find_by(user: current_user.id)
-    end
+    @profiles = current_user.admin? || current_user.manager? ? @certificate.profiles : @certificate.profiles.find_by(user: current_user.id)
     respond_to do |format|
       format.pdf do
-        render pdf: "Course #{@certificate.level.name} of smthing foundation",
-        page_size: 'A4',
-        template: "certificates/show.html.erb",
-        layout: "pdf.html",
-        orientation: "Landscape",
-        lowquality: true,
-        zoom: 1,
-        dpi: 75
+        render pdf: "Course_#{@certificate.level.name}",
+               page_size: 'A4',
+               template: 'certificates/show.html.erb',
+               layout: 'pdf.html',
+               orientation: 'Landscape',
+               lowquality: true,
+               zoom: 1,
+               dpi: 75
       end
     end
   end
@@ -31,10 +27,12 @@ class CertificatesController < ApplicationController
   private
 
   def certificate_params
-		params.require(:certificate).permit(
-			:header, 
-      :message
-		)
+    params
+      .require(:certificate)
+      .permit(
+        :header,
+        :message
+      )
   end
 
   def current_certificate

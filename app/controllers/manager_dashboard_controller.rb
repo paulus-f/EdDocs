@@ -58,9 +58,6 @@ class ManagerDashboardController < ApplicationController
     jwt = JwtToken.find_by(token: (data['token']))
     if check_correct_token(jwt, student)
       student.jwt_tokens.delete(jwt)
-      
-      binding.pry
-      
       if student.foundation || !foundation.invites.include?(student)
         render json: { alertType: 'warning', message: 'You are already join to foundation or your invite have been deleted' }
       else

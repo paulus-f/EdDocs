@@ -13,7 +13,6 @@ gem 'mini_magick'
 gem 'wicked_pdf'
 gem 'wkhtmltopdf-binary'
 gem 'mime-types', require: 'mime/types/full'
-#gem for ENV variables
 gem 'figaro'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.2.2'
@@ -43,10 +42,9 @@ gem 'devise'
 gem 'enumerize'
 gem 'jwt'
 gem 'bootstrap'
-gem "paperclip", "~> 6.0.0"
+gem 'paperclip', "~> 6.0.0"
 gem 'aws-sdk-s3'
 gem 'sidekiq'
-#gem 'mini_racer'
 gem 'searchkick'
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
@@ -60,7 +58,7 @@ gem 'bootsnap', '>= 1.1.0', require: false
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-  gem "factory_bot_rails"
+  gem 'factory_bot_rails'
   gem 'faker'
   gem 'pry'
   gem 'rspec-rails', '~> 3.8'
@@ -69,15 +67,15 @@ end
 
 group :development do
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
-  gem 'web-console', '>= 3.3.0'
-  gem 'listen', '>= 3.0.5', '< 3.2'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
+  gem 'better_errors'
+  gem 'binding_of_caller'
+  gem 'bullet'
+  gem 'letter_opener'
+  gem 'listen', '>= 3.0.5', '< 3.2'
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
-  gem "better_errors"
-  gem "binding_of_caller"
-  gem 'bullet'
-  gem "letter_opener"
+  gem 'web-console', '>= 3.3.0'
 end
 
 group :test do
