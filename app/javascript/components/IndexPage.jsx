@@ -61,7 +61,7 @@ class IndexPage extends React.Component {
     this.setState({[name]: e.target.value, offset: 0})
     let pagefoundations
     if (name == 'type') {
-      value == 'all' ? pagefoundations = this.state.foundations : pagefoundations = this.filterFoundations(this.state.foundations, value)
+      pagefoundations = value == 'all' ? this.state.foundations : this.filterFoundations(this.state.foundations, value)
     }
     else if (this.state.type != 'all'){
       pagefoundations = this.filterFoundations(this.state.pagefoundations, this.state.type)

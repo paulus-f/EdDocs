@@ -5,4 +5,3 @@ class SupportWorker
     SupportMailer.message_to_support(message).deliver_now
   end
 end
-

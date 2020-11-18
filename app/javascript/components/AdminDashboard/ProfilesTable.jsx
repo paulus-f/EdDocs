@@ -366,7 +366,7 @@ class ProfilesTable extends React.Component {
         break;
       case 'approve':
         console.log("approve")
-        axios.post(`http://localhost:3000/approve_users`, {
+        axios.post('/approve_users', {
           users_id: selected,
           message: message,
           authenticity_token: token 
@@ -471,8 +471,8 @@ class ProfilesTable extends React.Component {
           </FormControl>
         </Paper>);
     else
-     return ""
-    }
+     return '';
+  }
 
   getMessage = (value) => {
     this.setState({

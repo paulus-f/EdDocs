@@ -349,15 +349,18 @@ class FoundationsTable extends React.Component {
                   const isSelected = this.isSelected(foundation.id);
                   var status, emailManager
                   if (foundation.managers.length != 0) {
-                    emailManager = foundation.managers[0].email
-                    status = 'Need Confirmation'
+                    emailManager = foundation.managers.map((m) => {
+                      return m.approve ? m.email : null;
+                    }).filter(n => n).join(',');
+
+                    status = 'Need Confirmation';
                     foundation.managers.forEach(manager => {
-                      if(manager.approve){
-                        status = 'Operating'
+                      if(manager.approve) {
+                        status = 'Operating';
                       }  
                     });
-                  }else {
-                    status = 'Not Manager'
+                  } else {
+                    status = 'Not Manager';
                   }
                   return (
                     <TableRow

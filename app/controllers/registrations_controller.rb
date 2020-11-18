@@ -54,10 +54,8 @@ class RegistrationsController < Devise::RegistrationsController
     users = User.where(id: users_id)
     users.each do |user|
       AdminMessageWorker.perform_async(@message, user.email)
-      if user.profile
-        user.profile.allergy.destroy
-      end
-      user.destroy
+      user&.profile&.allergy&.destroy if user.profile
+      user&.destroy
     end
     render json: { message: 'Complete' }, status: 200
   end
@@ -76,7 +74,7 @@ class RegistrationsController < Devise::RegistrationsController
       @foundation.save!
     else
       @foundation = Foundation.find_by(name: params.require(:foundation)[:name])
-      resource.foundation = @foundation
+      resource.update(foundation_id: @foundation.id)
     end
   end
 
@@ -88,7 +86,7 @@ class RegistrationsController < Devise::RegistrationsController
       resource.children << @student
       @student.parent = resource
     else
-      return render json: { message: 'The student already has a parent' }
+      render json: { message: 'The student already has a parent' }
     end
   end
 
