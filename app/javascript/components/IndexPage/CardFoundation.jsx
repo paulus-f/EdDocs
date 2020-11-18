@@ -19,8 +19,7 @@ const styles = {
   },
   media: {
     height: 285,
-  },
- 
+  }, 
 };
 
 class CardFoundation extends React.Component {
@@ -34,10 +33,11 @@ class CardFoundation extends React.Component {
   }
 
   render() {
-    const {classes} = this.props
-    const {foundation, foundation_url, students_count} = this.state
-    const name = foundation.name[0].toUpperCase() + foundation.name.slice(1)
-    const type = foundation.type_foundation[0].toUpperCase() + foundation.type_foundation.slice(1)
+    const {classes} = this.props;
+    const {foundation, foundation_url, students_count} = this.state;
+    const name = foundation.name[0].toUpperCase() + foundation.name.slice(1);
+    const type = foundation.type_foundation[0].toUpperCase() + foundation.type_foundation.slice(1);
+
     return (
       <Card onClick={() => location.reload()} className={classes.card}>
         <CardActionArea  component="div" disableRipple>
@@ -55,7 +55,7 @@ class CardFoundation extends React.Component {
                 Students: {students_count}
               </Typography>
               <Typography component="p">
-                {foundation.description.slice(0, 100)+'...'}
+                { foundation.desccription ? foundation.description.slice(0, 100) + '...' : '' }
               </Typography>
             </CardContent>
           </Link>
@@ -69,4 +69,4 @@ CardFoundation.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(CardFoundation)
+export default withStyles(styles)(CardFoundation);

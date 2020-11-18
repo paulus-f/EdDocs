@@ -1,5 +1,6 @@
 class CoursesController < ApplicationController
   before_action :find_level, only: %i[create update]
+
   def create
     @course = Course.new(course_params)
     @course.level_id = @level.id
