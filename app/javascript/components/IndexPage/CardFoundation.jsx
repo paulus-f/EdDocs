@@ -9,7 +9,7 @@ import axios from 'axios';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-
+import { Link, Redirect } from 'react-router-dom';
 
 const styles = {
   card: {
@@ -39,24 +39,26 @@ class CardFoundation extends React.Component {
     const name = foundation.name[0].toUpperCase() + foundation.name.slice(1)
     const type = foundation.type_foundation[0].toUpperCase() + foundation.type_foundation.slice(1)
     return (
-      <Card className={classes.card}>
-        <CardActionArea component='a' href={'/foundations/'+ this.state.foundation.id} style={{textDecoration: 'none'}}>
-          <CardMedia
-            className={classes.media}
-            image={foundation_url}
-            title={foundation.type_foundation}
-          />
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="h2">
-              {type + ' "' + name + '"'}
-            </Typography>
-            <Typography  variant='h6' component="h4">
-              Students: {students_count}
-            </Typography>
-            <Typography component="p">
-              {foundation.description.slice(0, 100)+'...'}
-            </Typography>
-          </CardContent>
+      <Card onClick={() => location.reload()} className={classes.card}>
+        <CardActionArea  component="div" disableRipple>
+          <Link to={'/foundations/'+ this.state.foundation.id}>          
+            <CardMedia
+              className={classes.media}
+              image={foundation_url}
+              title={foundation.type_foundation}
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="h2">
+                {type + ' "' + name + '"'}
+              </Typography>
+              <Typography  variant='h6' component="h4">
+                Students: {students_count}
+              </Typography>
+              <Typography component="p">
+                {foundation.description.slice(0, 100)+'...'}
+              </Typography>
+            </CardContent>
+          </Link>
         </CardActionArea>
       </Card>
     );

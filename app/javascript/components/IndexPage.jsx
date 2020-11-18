@@ -16,7 +16,7 @@ import AddIcon from '@material-ui/icons/Add';
 import Fab from '@material-ui/core/Fab';
 import Grid from '@material-ui/core/Grid';
 import CardFoundation from './IndexPage/CardFoundation'
-
+import { Route, BrowserRouter } from 'react-router-dom';
 
 const theme = createMuiTheme({
   typography: {
@@ -45,14 +45,14 @@ class IndexPage extends React.Component {
       pagefoundations: JSON.parse(props.foundations),
       offset: 0,
       total: JSON.parse(props.foundations).length,
-      type: 'all'
+      type: 'all',
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleClick = this.handleClick.bind(this)
   }
 
   handleClick(offset) {
-    this.setState({ offset});
+    this.setState({ offset });
   }
 
   handleChange(e) {
@@ -78,76 +78,76 @@ class IndexPage extends React.Component {
   
   render() {
     const { classes } = this.props;
-    const {foundations, currentUser, pagefoundations, total, offset} = this.state
+    const { foundations, currentUser, pagefoundations, total, offset} = this.state
     return (
-      <div>
-      <Paper className='IndexPage'>
-        <div className='form-row' style={{maxWidth:'1845px', minHeight:'80px'}}>
-            <div className='col-md-8 IndexPageTitle'>
-              <h2>Our foundations</h2>
-            </div>
-            <div className='col-md-2'>
-            <FormControl className={classes.formControl +' IndexPageSelect'}> 
-            <InputLabel htmlFor="type-select">Type</InputLabel>
-              <Select
-                className='type-select'
-                value={this.state.type}
-                onChange={this.handleChange}
-                color='primary'
-                placeholder='All'
-                inputProps={{
-                  name: 'type',
-                  id: 'type-select',
-                }}
-              >
-                <MenuItem value="all">
-                    All
-                  </MenuItem>
-                  <MenuItem value="university">
-                    University
-                  </MenuItem>
-                  <MenuItem value="college">
-                    College
-                  </MenuItem>
-                  <MenuItem value="school">
-                    School
-                  </MenuItem>
-                  <MenuItem value="kindergarten">
-                    Kindergarten
-                  </MenuItem>
-              </Select>
-              </FormControl>
+      <BrowserRouter>
+        <Route path='/'>
+          <div>
+            <Paper className='IndexPage'>
+              <div className='form-row' style={{maxWidth:'1845px', minHeight:'80px'}}>
+                  <div className='col-md-8 IndexPageTitle'>
+                    <h2>Our foundations</h2>
+                  </div>
+                  <div className='col-md-2'>
+                  <FormControl className={classes.formControl +' IndexPageSelect'}> 
+                  <InputLabel htmlFor="type-select">Type</InputLabel>
+                    <Select
+                      className='type-select'
+                      value={this.state.type}
+                      onChange={this.handleChange}
+                      color='primary'
+                      placeholder='All'
+                      inputProps={{
+                        name: 'type',
+                        id: 'type-select',
+                      }}
+                    >
+                      <MenuItem value="all">
+                          All
+                        </MenuItem>
+                        <MenuItem value="university">
+                          University
+                        </MenuItem>
+                        <MenuItem value="college">
+                          College
+                        </MenuItem>
+                        <MenuItem value="school">
+                          School
+                        </MenuItem>
+                        <MenuItem value="kindergarten">
+                          Kindergarten
+                        </MenuItem>
+                    </Select>
+                    </FormControl>
+                </div>
+                <div className='col-md-2'>
+                  <MuiThemeProvider theme={theme} >
+                    <CssBaseline />
+                    <Pagination
+                      limit={10}
+                      offset={offset}
+                      total={total}
+                      className='IndexPagePagination'
+                      onClick={(e, offset) => this.handleClick(offset)}
+                    />
+                  </MuiThemeProvider>
+                </div>
+              </div>
+            </Paper>
+            <Grid item xs={12} container className={classes.demo} justify="center" spacing={24}>
+              {pagefoundations.slice(offset, offset + 10).map(foundationObj => (
+                <Grid key={foundationObj.foundation.id} item>
+                  <CardFoundation
+                    foundation = {foundationObj}
+                    />
+                </Grid>
+              ))}
+            </Grid>
           </div>
-          <div className='col-md-2'>
-            <MuiThemeProvider theme={theme} >
-              <CssBaseline />
-              <Pagination
-                limit={10}
-                offset={offset}
-                total={total}
-                className='IndexPagePagination'
-                onClick={(e, offset) => this.handleClick(offset)}
-              />
-            </MuiThemeProvider>
-          </div>
-        </div>
-      </Paper>
-      <Grid item xs={12} container className={classes.demo} justify="center" spacing={24}>
-        {pagefoundations.slice(offset, offset + 10).map(foundationObj => (
-          <Grid key={foundationObj.foundation.id} item>
-            <CardFoundation 
-              foundation = {foundationObj}
-              />
-          </Grid>
-        ))}
-      </Grid>
-    </div>
+        </Route>
+      </BrowserRouter>
     );
   }
 }
-
-IndexPage.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
 
 export default withStyles(styles)(IndexPage);
