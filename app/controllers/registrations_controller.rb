@@ -91,27 +91,22 @@ class RegistrationsController < Devise::RegistrationsController
   end
 
   def create_university_student(resource)
-    # <ActionController::Parameters {"user"=><ActionController::Parameters 
-    #{"email"=>"fed@fed.qwe", "password"=>"qwe123", "password_confirmation"=>"qwe123", "role"=>"student"} permitted: false>, "profile"=><Actio│:
-    # nController::Parameters {"first_name"=>"edfew", "last_name"=>"gvfds"} permitted: false>, 
-    #"foundation"=>{"type_foundation"=>"university", "name"=>"Unikk"}, "student"=>{"student_email"=>"", "name_foundation"=>"U│ 
-    # nikk"}, "authenticity_token"=>"gtu00QAR5ZYP5z3oW8VE1V+yXwKoziO/Xr/W2CsnJ3XRJ2UCN9UxnvojVmnn5G5gibrsY6MrhgvNC+9qmJPoWg==", 
-    #"controller"=>"registrations", "action"=>"create", "registration"=>{"user"=>{"email"=>"│n
-    # fed@fed.qwe", "password"=>"qwe123", "password_confirmation"=>"qwe123", "role"=>"student"}, 
-    #"profile"=>{"first_name"=>"edfew", "last_name"=>"gvfds"}, "foundation"=>{"type_foundation"=>"university", "name"=>"Uni│i
-    # kk"}, "student"=>{"student_email"=>"", "name_foundation"=>"Unikk"}}} permitted: fals
     create_student(student: resource)
   end
 
   def create_student(parent: nil, student: nil)
     @foundation = Foundation.find_by(name: params.require(:foundation)[:name])
+    group = @foundation.groups.find_by(name: params[:student][:foundationLvl])
+    group ||= @foundation.levels.find_by(name: params[:student][:foundationLvl]).first unless group
+
     CreateStudent.perform(
       student: student,
       parent: parent,
       student_email: params[:student][:student_email],
       first_name: params[:profile][:first_name],
       last_name: params[:profile][:last_name],
-      foundation: @foundation
+      foundation: @foundation,
+      group: group
     )
   end
 

@@ -78,36 +78,36 @@ class SignUp extends React.Component {
   };
 
   updateFirstName = (value) => {
-    this.setState({ firstName: value })
+    this.setState({ firstName: value });
   }
 
   updateLastName = (value) => {
-    this.setState({ lastName: value })
+    this.setState({ lastName: value });
   }
 
   updateFoundationLvl = (value) => {
-    this.setState({ foundationLvl: value })
+    this.setState({ foundationLvl: value });
   }
 
   updateFoundationName = (value) => {
-    this.setState({ foundationName: value })
+    this.setState({ foundationName: value });
   }
 
   updateFoundationType = (value) => {
-    this.setState({ foundationType: value })
+    this.setState({ foundationType: value });
   }
 
   updateStudentEmail = (value) => {
-    this.setState({ studentEmail: value })
+    this.setState({ studentEmail: value });
   }
 
   updateRole = (value) => {
-    this.setState({ role: value })
+    this.setState({ role: value });
   }
 
   componentDidUpdate()
   {
-    console.log(this.state)
+    console.log(this.state);
   }
 
   handleSubmit = event => {
@@ -118,21 +118,24 @@ class SignUp extends React.Component {
       password_confirmation: this.state.password_confirmation,
       role: this.state.role
     };
+
     const profile = {
       first_name: this.state.firstName,
       last_name: this.state.lastName
-    }
+    };
+
     const foundation = {
       type_foundation: this.state.foundationType,
       name: this.state.foundationName,
-      foundationLvl: this.foundationLvl
-    }
+      foundationLvl: this.state.foundationLvl
+    };
+
     const student = {
       student_email: this.state.studentEmail,
-      type_foundation: this.foundationType,
+      type_foundation: this.state.foundationType,
       name_foundation: this.state.foundationName,
-      foundationLvl: this.foundationLvl
-    }
+      foundationLvl: this.state.foundationLvl
+    };
 
     axios.post(`/users/`, {
         user,
@@ -145,15 +148,14 @@ class SignUp extends React.Component {
         this.setState({
           alert: res.data.message,
           open: true
-        })
+        });
+
         if(res.data.message == 'Complete')
-        {
-          window.location.reload()
-        }
+          window.location.reload();
       })
-      .catch( err => {
-        console.log(err)
-      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   handleClose = () => {
@@ -166,7 +168,7 @@ class SignUp extends React.Component {
 
     return (
       <div>
-         <Snackbar
+        <Snackbar
           anchorOrigin={{vertical: 'top', horizontal: 'center'}}
           open={open}
           onClose={this.handleClose}

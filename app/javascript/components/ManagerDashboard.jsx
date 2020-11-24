@@ -177,7 +177,7 @@ class ManagerDashboard extends React.Component {
                                                SetTypeAlert={this.SetTypeAlert} />});
         break; 
       case 'courses':
-        this.setState({point: <CoursesPanel 
+        this.setState({point: <CoursesPanel student={false}
                                             deleteCourse={this.deleteCourse}
                                             courses={this.state.courses}
                                             foundation={this.props.foundation}

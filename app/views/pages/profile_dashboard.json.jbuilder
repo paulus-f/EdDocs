@@ -2,7 +2,6 @@ json.current_user do
   json.id current_user.id
   json.email current_user.email
   json.role current_user.role
-  
   json.created_at current_user.created_at
 end
 
@@ -17,6 +16,7 @@ if current_user.parent?
     json.child_profile child.profile
   end
 end
+
 if current_user.student?
   json.typeUser 'student'
   json.group current_user.group
@@ -26,12 +26,14 @@ if current_user.student?
       json.id student.id
     end
     json.level current_user.group.level
+
     json.courses current_user.group.level.courses do |course|
       json.name course.name
       json.hours course.hours
       json.start course.start.to_date
       json.finish course.finish.to_date
       json.description course.description
+      json.level_id course.level_id
       json.image_url course.photo.url == 'notfound.png' ? asset_url(course.photo.url) : course.photo.url
     end
   end
@@ -44,10 +46,10 @@ if current_user.student?
       json.id course.id
     end
   end
+
   json.managersCount current_user.foundation.managers.count
   json.studentsCount current_user.foundation.students.count
   json.foundationImage current_user.foundation.image.attached? ? url_for(current_user.foundation.image) : asset_url('not_found_foundation_image')
-  
 
   json.certificates current_user.profile.certificates do |certificate|
     json.id certificate.id
@@ -55,6 +57,7 @@ if current_user.student?
     json.levelName certificate.level.name
   end
 end
+
 if current_user.parent?
   json.typeUser 'parent'
   json.children current_user.children.all

@@ -63,6 +63,7 @@ class PagesController < ApplicationController
 
   def waiting_parent_or_student_page
     @children_profile = current_user.university_student? ? current_user.profile : current_user.children[0].profile
+
     current_user.enrollment_form ? (render 'waiting_page') : (render 'registration_children')
   end
 

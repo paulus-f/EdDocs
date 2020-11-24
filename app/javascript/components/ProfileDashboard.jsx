@@ -26,8 +26,8 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Avatar from '@material-ui/core/Avatar';
-import FoundationShow from './FoundationShow'
-
+import FoundationShow from './FoundationShow';
+import CoursesPanel from './ManagerDashboard/CoursesPanel';
 
 const styles = theme => ({
   menuItem: {
@@ -145,12 +145,12 @@ class ProfileDashboard extends React.Component {
                     typeUser = {this.props.typeUser}
                     foundation = {this.props.foundation}
                   />,
-        })
+        });
         break;
       case 'myChat':
         this.setState({
           point: <Chat foundation={this.props.foundation}/>
-        })
+        });
         break;
       case 'myCertificates':
         this.setState({
@@ -158,13 +158,13 @@ class ProfileDashboard extends React.Component {
                     current_user = {this.props.current_user}
                     profile = { this.props.profile}
                     certificates = { this.props.certificates}
-                  />
-        })
+                 />
+        });
         break;
       case 'myGroup':
         this.setState({
           point: this.renderListStudent()
-        })
+        });
         break;
       case 'myChildren':
         this.setState({
@@ -172,17 +172,30 @@ class ProfileDashboard extends React.Component {
               current_user = {this.props.current_user}
               children = { this.props.children}
           />
-        })
+        });
         break;
       case 'myFoundation':
-      this.setState({point: <FoundationShow
-                            foundationImage = {this.props.foundationImage} 
-                            levels = {this.props.levels}
-                            current_user = {this.props.current_user}
-                            foundation = {this.props.foundation}
-                            studentsCount={this.props.students_count}
-                            managersCount={this.props.managers_count}/>})
-      break;
+        this.setState({point: <FoundationShow
+                                foundationImage = {this.props.foundationImage} 
+                                levels = {this.props.levels}
+                                current_user = {this.props.current_user}
+                                foundation = {this.props.foundation}
+                                studentsCount={this.props.students_count}
+                                managersCount={this.props.managers_count}
+                              />});
+        break;
+      case 'myCourses':
+        this.setState({point: <CoursesPanel
+                                student={true}
+                                courses={this.props.courses}
+                                imageNotFound = {this.props.imageNotFound}
+                                levels = {this.props.levels}
+                                current_user = {this.props.current_user}
+                                foundation = {this.props.foundation}
+                                studentsCount={this.props.students_count}
+                                managersCount={this.props.managers_count}
+                              />});
+        break;
     }
 };
 
@@ -199,36 +212,43 @@ class ProfileDashboard extends React.Component {
             </MenuItem>
     }
     if(typeUser == 'student') {
-      menu =<div> 
-             
-            <MenuItem className={classes.menuItem} onClick={this.handleSelect} id='myFoundation'>
-                <ListItemIcon className={classes.icon}>
-                  <DomainIcon />
-                </ListItemIcon>
-                <ListItemText classes={{ primary: classes.primary }} inset primary="My Foundation"/>
-              </MenuItem>
-              <MenuItem className={classes.menuItem} onClick={this.handleSelect} id='myGroup'>
-                <ListItemIcon className={classes.icon}>
-                  <GroupIcon />
-                </ListItemIcon>
-                <ListItemText classes={{ primary: classes.primary }} inset primary="My Group"/>
-              </MenuItem>
+      menu = <div> 
+               <MenuItem className={classes.menuItem} onClick={this.handleSelect} id='myFoundation'>
+                 <ListItemIcon className={classes.icon}>
+                     <DomainIcon />
+                 </ListItemIcon>
+                 <ListItemText classes={{ primary: classes.primary }} inset primary="My Foundation"/>
+               </MenuItem>
+               
+               <MenuItem className={classes.menuItem} onClick={this.handleSelect} id='myGroup'>
+                 <ListItemIcon className={classes.icon}>
+                   <GroupIcon />
+                 </ListItemIcon>
+                 <ListItemText classes={{ primary: classes.primary }} inset primary="My Group"/>
+               </MenuItem>
+ 
                <MenuItem className={classes.menuItem} onClick={this.handleSelect} id='myCertificates'>
-                <ListItemIcon className={classes.icon}>
-                  <SchoolIcon />
-                </ListItemIcon>
-                <ListItemText classes={{ primary: classes.primary }} inset primary="My Certificates"/>
-              </MenuItem>
-              <MenuItem className={classes.menuItem} onClick={this.handleSelect} id='myChat'>
-                <ListItemIcon className={classes.icon}>
-                  <ChatIcon />
-                </ListItemIcon>
-                <ListItemText classes={{ primary: classes.primary }} inset primary="Chat"/>
-              </MenuItem>
-         
-            </div>
+                 <ListItemIcon className={classes.icon}>
+                   <SchoolIcon />
+                 </ListItemIcon>
+                 <ListItemText classes={{ primary: classes.primary }} inset primary="My Certificates"/>
+               </MenuItem>
+ 
+               <MenuItem className={classes.menuItem} onClick={this.handleSelect} id='myChat'>
+                 <ListItemIcon className={classes.icon}>
+                   <ChatIcon />
+                 </ListItemIcon>
+                 <ListItemText classes={{ primary: classes.primary }} inset primary="Chat"/>
+               </MenuItem>
+ 
+               <MenuItem className={classes.menuItem} onClick={this.handleSelect} id='myCourses'>
+                 <ListItemIcon className={classes.icon}>
+                   <BookIcon />
+                 </ListItemIcon>
+                 <ListItemText classes={{ primary: classes.primary }} inset primary="My Courses"/>
+               </MenuItem>
+             </div>;
     } 
-     
 
     return (
         <div>
@@ -263,7 +283,7 @@ class ProfileDashboard extends React.Component {
               {this.ListItemComposition()}
             </div>
             <div className="col-12 col-sm-12  col-md-7 col-lg-9 col-xs-12 col-xl-9">
-              {this.state.point}
+              { this.state.point }
             </div>
           </div>
     )

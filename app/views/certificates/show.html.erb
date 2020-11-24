@@ -9,7 +9,7 @@
     </p>
     <% if current_user.student?%>
       <p>
-        Dear <%= @profile.first_name%> <%= @profile.last_name %>
+        Dear <%= current_user.profile.first_name%> <%= current_user.profile.last_name %>
       </p>
     <% end %>
   </div>

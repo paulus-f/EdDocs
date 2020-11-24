@@ -215,8 +215,8 @@ class CoursesPanel extends React.Component {
   }
 
   render() {
-    const { classes } = this.props;
-    if (this.state.form)
+    const { classes, student } = this.props;
+    if (this.state.form && !student)
       return(
         this.renderCourseForm())
     else
@@ -226,34 +226,39 @@ class CoursesPanel extends React.Component {
             <div className='col Course-title'>
               <h3>Courses</h3>
             </div>
-              <div className='col AddButton'>
-              <Fab color="primary" aria-label="Add" className={classes.fab} onClick={this.openCloseForm}>
-                <AddIcon />
-             </Fab>
-            </div>
-            <div className='col'>
-            <FormControl className={classes.formControl}> 
-            <InputLabel htmlFor="level-select">Level</InputLabel>
-              <Select
-                className='Levels-select'
-                value={this.state.level}
-                onChange={this.handleChange}
-                color='primary'
-                placeholder='All'
-                inputProps={{
-                  name: 'level',
-                  id: 'level-select',
-                }}
-              >
-                <MenuItem value="all">
-                    All
-                  </MenuItem>
-                  {this.state.levels.map(level => (
-                    <MenuItem key={-level.id} value={level}>{level.name}</MenuItem>
-                  ))}
-              </Select>
-              </FormControl>
-          </div>
+            { !student &&
+                <div className='col AddButton'>
+                  <Fab color="primary" aria-label="Add" className={classes.fab} onClick={this.openCloseForm}>
+                    <AddIcon />
+                  </Fab>
+                </div>
+            }
+            {
+              !student &&
+                <div className='col'>
+                  <FormControl className={classes.formControl}> 
+                    <InputLabel htmlFor="level-select">Level</InputLabel>
+                    <Select
+                      className='Levels-select'
+                      value={this.state.level}
+                      onChange={this.handleChange}
+                      color='primary'
+                      placeholder='All'
+                      inputProps={{
+                        name: 'level',
+                        id: 'level-select',
+                      }}
+                    >
+                      <MenuItem value="all">
+                        All
+                      </MenuItem>
+                      {this.state.levels.map(level => (
+                        <MenuItem key={-level.id} value={level}>{level.name}</MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </div>
+            }
           <div className='col-md-4 FilterSet'>
           <FormControl component="fieldset">
             <FormLabel component="h4">Select</FormLabel>
@@ -305,13 +310,16 @@ class CoursesPanel extends React.Component {
         </div>
         <Divider variant='middle'/>
         <div className="Levels-courses card-deck">
-          {this.state.pagecourses.slice(this.state.offset, this.state.offset + 12).map(course =>  
-                (
-                  <Course renderCourseFormForUpdate={this.renderCourseFormForUpdate} 
-                          level={this.state.levels[this.state.levels.findIndex((level) => {if (level.id == course.level_id) return level.name})].name}
-                          deleteCourse={this.deleteCourse} key={course.id} course={course}/>
-                )
-          )}
+          {
+            this.state.pagecourses.slice(this.state.offset, this.state.offset + 12).map(course =>  
+              <Course renderCourseFormForUpdate={this.renderCourseFormForUpdate}
+                      level={this.state.levels.find((level) => { return level.id == course.level_id}).name}
+                      deleteCourse={this.deleteCourse}
+                      key={course.id}
+                      course={course}
+                      student={student}
+              />)
+          }
         </div>
       </Paper>)
   }

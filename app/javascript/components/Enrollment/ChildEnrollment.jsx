@@ -97,10 +97,6 @@ class ChildForm extends React.Component {
                onChange={ this.handleChange }
                value={ this.state.params.hobbie }
               />
-              <Fab color="secondary" variant="extended" size="small" className={classes.fab}>
-                <NavigationIcon className={classes.extendedIcon} />
-                Copy from profile
-              </Fab>
             </FormControl>
           </form>
         </div>
