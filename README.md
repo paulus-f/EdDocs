@@ -30,3 +30,10 @@ SECRET_KEY_BASE=SECRET_KEY
 `webpack` - `sudo docker-compose exec app bin/webpack-dev-server`
 
 `attach container for debug` - `sudo docker attach $(sudo docker-compose ps -q app)`
+
+# CANVAS FOR CHAARTS LIB
+```
+/app/javascript/components/AdminDashboard/jquery.canvasjs.min.js
+/app/javascript/components/AdminDashboard/canvasjs.min.js
+```
+Link - https://canvasjs.com/docs/charts/integration/react/
