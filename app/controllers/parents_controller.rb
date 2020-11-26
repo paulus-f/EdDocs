@@ -12,6 +12,7 @@ class ParentsController < ApplicationController
 
   def show
     @children_profile = manager_get_child(params[:id])
+
     if @children_profile
       render 'pages/enrollment_show'
     else

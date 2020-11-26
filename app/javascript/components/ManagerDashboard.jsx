@@ -136,30 +136,30 @@ class ManagerDashboard extends React.Component {
     switch(id) {
       case 'profile':
         this.setState({point: <Profile current_user={this.props.current_user}
-                                        foundation = {this.props.foundation}/>})
+                                       foundation={this.props.foundation}/>})
         break;
       case 'foundation':
         this.setState({
           point: <FoundationShow foundationImage={this.props.foundationImage}
-                                   foundation={this.state.foundation}
-                                   manager={this.props.manager}
-                                   foundationImageNotFound={this.props.foundationImageNotFound}
-                                   levels={this.state.levels}
-                                   OpenCloseAlert={this.OpenCloseAlert}
-                                   SetMessageAlert={this.SetMessageAlert}
-                                   SetTypeAlert={this.SetTypeAlert}
-                                   current_user={this.state.current_user}
-                                   studentsCount={this.state.students.length}
-                                   managersCount={this.props.managers_count}/>
+                                 foundation={this.state.foundation}
+                                 manager={this.props.manager}
+                                 foundationImageNotFound={this.props.foundationImageNotFound}
+                                 levels={this.state.levels}
+                                 OpenCloseAlert={this.OpenCloseAlert}
+                                 SetMessageAlert={this.SetMessageAlert}
+                                 SetTypeAlert={this.SetTypeAlert}
+                                 current_user={this.state.current_user}
+                                 studentsCount={this.state.students.length}
+                                 managersCount={this.props.managers_count}/>
           })
         break
       case 'groups':
         this.setState({point: <LevelsPanel levels={this.props.levels}
-                                            studentsWithoutGroup={this.state.studentsWithoutGroup}
-                                            foundation={this.props.foundation}
-                                            OpenCloseAlert={this.OpenCloseAlert}
-                                            SetMessageAlert={this.SetMessageAlert}
-                                            SetTypeAlert={this.SetTypeAlert}/>})
+                                           studentsWithoutGroup={this.state.studentsWithoutGroup}
+                                           foundation={this.props.foundation}
+                                           OpenCloseAlert={this.OpenCloseAlert}
+                                           SetMessageAlert={this.SetMessageAlert}
+                                           SetTypeAlert={this.SetTypeAlert}/>})
         break;
       case 'students':
         this.setState({point: <TableOfStudents students={this.state.students}
@@ -190,16 +190,16 @@ class ManagerDashboard extends React.Component {
                                             SetTypeAlert={this.SetTypeAlert}/>})
         break;
       case 'requests':
-        this.setState({point: <TableOfRequests
-                                  requests={this.state.requests}
-                                  OpenCloseAlert={this.OpenCloseAlert}
-                                  SetMessageAlert={this.SetMessageAlert}
-                                  SetTypeAlert={this.SetTypeAlert}/> })
+        this.setState({point: <TableOfRequests requests={this.state.requests}
+                                               OpenCloseAlert={this.OpenCloseAlert}
+                                               SetMessageAlert={this.SetMessageAlert}
+                                               SetTypeAlert={this.SetTypeAlert}/> })
         break;
       case 'reports':
-          this.setState({
-            point: <Reports foundationId={this.state.foundation.id}/>
-          })
+        this.setState({
+          point: <Reports foundationId={this.state.foundation.id}/>
+        });
+        break;
   }
 };
 

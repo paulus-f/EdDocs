@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   get '/get_levels', to: 'levels#get_levels'
   get '/list_foundations', to: 'foundations#list_foundations'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-  
+
   #pages routes
   post '/support', to: 'pages#support'
   get '/new_foundation', to: 'pages#foundation_form', as: :foundation_form
@@ -57,7 +57,6 @@ Rails.application.routes.draw do
   # idk what route it should be, mby like a /foundation/students or smthing else
   # *Should be changed, also should change for it controller
   get '/children/show', to: 'parents#show'
-
 
   post '/levels/generate_by_template', to: 'levels#generate_by_template'
   post '/groups/kick_from_group/:student_id', to: 'groups#kick_from_group'

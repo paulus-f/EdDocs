@@ -94,7 +94,6 @@ class AdminDashboard extends React.Component {
   }
 };
 
-
   ListItemComposition() {
     const { classes } = this.props;
     return (

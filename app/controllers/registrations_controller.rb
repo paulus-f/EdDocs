@@ -5,17 +5,10 @@ class RegistrationsController < Devise::RegistrationsController
   CNF = 'CNF'.freeze
 
   def create
-    build_resource(sign_up_params)
-    resource.save
-    return render json: { message: resource_error_messages } if resource.errors.present?
-
-    resource.profile.update(profile_up_params)
-    create_foundation(resource) if resource.role == 'manager'
-    check_student(params, resource) if resource.role == 'parent'
-    create_university_student(resource) if resource.role == 'student'
+    result = sign_up_via_transaction
+    return render json: { message: resource_error_messages || 'Sign Up Error' } unless result
 
     yield resource if block_given?
-
     if resource.persisted?
       if resource.active_for_authentication?
         set_flash_message :notice, :signed_up if is_flashing_format?
@@ -31,7 +24,6 @@ class RegistrationsController < Devise::RegistrationsController
       end
     else
       clean_up_passwords resource
-
       render json: { message: resource_error_messages }
     end
   end
@@ -61,6 +53,23 @@ class RegistrationsController < Devise::RegistrationsController
   end
 
   private
+
+  def sign_up_via_transaction
+    ActiveRecord::Base.transaction do
+      build_resource(sign_up_params)
+      return false unless resource.valid?
+
+      resource.save
+      resource.profile.update(profile_up_params)
+      create_foundation(resource) if resource.role == 'manager'
+      check_student(params, resource) if resource.role == 'parent'
+      create_university_student(resource) if resource.role == 'student'
+
+      true
+    rescue ActiveRecord::ActiveRecordError
+      false
+    end
+  end
 
   def resource_error_messages
     resource.errors.full_messages.join(',')
@@ -99,7 +108,7 @@ class RegistrationsController < Devise::RegistrationsController
     group = @foundation.groups.find_by(name: params[:student][:foundationLvl])
     group ||= @foundation.levels.find_by(name: params[:student][:foundationLvl]).first unless group
 
-    CreateStudent.perform(
+    CreateStudent.perform_async(
       student: student,
       parent: parent,
       student_email: params[:student][:student_email],
