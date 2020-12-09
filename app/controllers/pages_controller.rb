@@ -44,6 +44,8 @@ class PagesController < ApplicationController
   def manager_dashboard
     @foundation = current_user.foundation
     authorize! :manager_dashboard, @foundation
+    return redirect_to root_path unless current_user.manager?
+
     render 'manager_dashboard'
   end
 

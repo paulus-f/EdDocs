@@ -14,7 +14,7 @@ class CreateStudent
         update_student(student: student, first_name: first_name,
                        last_name: last_name, foundation: foundation,
                        group: group)
-        student
+        student.reload
       end
     end
 

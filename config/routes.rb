@@ -77,11 +77,10 @@ Rails.application.routes.draw do
   mount Sidekiq::Web => '/sidekiq'
 
   resources :conversations, only: [:index, :create] do
-
-  	member do 
+  	member do
   		post :close
-  	end
-
+    end
+    
   	resources :messages, only: [:create]
   end
 end

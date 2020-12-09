@@ -66,7 +66,8 @@ class RegistrationsController < Devise::RegistrationsController
       create_university_student(resource) if resource.role == 'student'
 
       true
-    rescue ActiveRecord::ActiveRecordError
+    rescue ActiveRecord::ActiveRecordError => e
+      Rails.logger.error(e.to_s)
       false
     end
   end
@@ -106,7 +107,7 @@ class RegistrationsController < Devise::RegistrationsController
   def create_student(parent: nil, student: nil)
     @foundation = Foundation.find_by(name: params.require(:foundation)[:name])
     group = @foundation.groups.find_by(name: params[:student][:foundationLvl])
-    group ||= @foundation.levels.find_by(name: params[:student][:foundationLvl]).first unless group
+    group ||= @foundation.levels.find_by(name: params[:student][:foundationLvl])&.groups&.first unless group
 
     CreateStudent.perform(
       student: student,
