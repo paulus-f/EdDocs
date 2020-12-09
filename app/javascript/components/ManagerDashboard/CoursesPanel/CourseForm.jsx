@@ -11,6 +11,8 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import axios from 'axios';
+import Trix from "trix";
+import { ReactTrixRTEInput, ReactTrixRTEToolbar } from "react-trix-rte";
 
 
 const styles = theme => ({
@@ -171,109 +173,127 @@ class CourseForm extends React.Component {
                         </Button>
     return (
       <div className='CourseForm'>
-      <h3>Course form</h3>
-      <Paper>
-      <form className={classes.container} autoComplete="off" onSubmit={this.props.course ? this.handleUpdate : this.handleSubmit}>
-        <FormControl component="fieldset" style={{width:'100%'}} required className={classes.formControl}>
-          <div className='form-row' style={{width: '750px'}}>
-            <div className='col-md-6'>
-              {this.renderImage()}
-              <div className='form-group ImageButtons'>
-                {buttonUnderImage}
-              </div>
-            </div>
-            <div className='form-group col-md-6 FirstGroup'>   
-                <TextField
-                  autoFocus
-                  id="outlined-group-name-input"
-                  className={classes.textField}
-                  value={this.state.name}
-                  name="name"
+        <h3>Course form</h3>
+        <Paper>
+          <form className={classes.container} autoComplete="off" onSubmit={this.props.course ? this.handleUpdate : this.handleSubmit}>
+            <FormControl component="fieldset" style={{width:'100%'}} required className={classes.formControl}>
+              <div className='form-row' style={{width: '750px'}}>
+                  <div className='col-md-6'>
+                    {this.renderImage()}
+                    <div className='form-group ImageButtons'>
+                      {buttonUnderImage}
+                    </div>
+                  </div>
+                  <div className='form-group col-md-6 FirstGroup'>   
+                      <TextField
+                        autoFocus
+                        id="outlined-group-name-input"
+                        className={classes.textField}
+                        value={this.state.name}
+                        name="name"
+                        required
+                        label='Name'
+                        margin="normal"
+                        onChange={this.handleChange}/>
+                      <FormControl required className={classes.textField}>
+                        <InputLabel htmlFor="level-select">Level</InputLabel>
+                        <Select
+                          className=''
+                          value={this.state.level}
+                          onChange={this.handleChange}
+                          color='primary'
+                          required
+                          placeholder='All'
+                          inputProps={{
+                            name: 'level',
+                            id: 'level-select',
+                          }}>
+                          {this.props.levels.map(level => (
+                            <MenuItem key={-level.id} value={level}>{level.name}</MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                  </div>
+                </div>
+                <div className='form-row Shedule'>
+                  <div className='col-md-4'>
+                    <DatePickers handleChange={this.handleChange}
+                                value={this.state.startData}
+                                name='startData'
+                                label='Course start' 
+                                min={this.props.startTerm}
+                                max={this.props.finishTerm}/>
+                  </div>
+                  <div className='col-md-4'>
+                    <DatePickers handleChange={this.handleChange}
+                                value={this.state.finishData}
+                                name='finishData'
+                                label = 'Course finish'
+                                min={this.props.startTerm}
+                                max={this.props.finishTerm}/>
+                  </div>
+                  <div className='col-md-4'>
+                    <TextField
+                        id="outlined-number"
+                        label="Hours"
+                        style={{width: '100px'}}
+                        value={this.state.hours}
+                        onChange={this.handleChange}
+                        type="number"
+                        name='hours'
+                        required
+                        className={classes.textField + " NumberField"}
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                        margin="normal"
+                      />
+                  </div>
+                </div>
+              <div>
+                {/* <TextField
+                  id="outlined-desc"
+                  label="Description"
+                  placeholder="Short description (maximum 200 symbols)"
+                  multiline
+                  value={this.state.description}
+                  style={{width:'85%', marginTop: '5%', marginBottom: '5%'}}
                   required
-                  label='Name'
+                  rows='4'
+                  rowsMax='5'
+                  name="description"
+                  className={classes.textField}
                   margin="normal"
-                  onChange={this.handleChange}/>
-                <FormControl required className={classes.textField}>
-                  <InputLabel htmlFor="level-select">Level</InputLabel>
-                  <Select
-                    className=''
-                    value={this.state.level}
-                    onChange={this.handleChange}
-                    color='primary'
-                    required
-                    placeholder='All'
-                    inputProps={{
-                      name: 'level',
-                      id: 'level-select',
-                    }}>
-                    {this.props.levels.map(level => (
-                      <MenuItem key={-level.id} value={level}>{level.name}</MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-            </div>
-          </div>
-          <div className='form-row Shedule'>
-          <div className='col-md-4'>
-            <DatePickers handleChange={this.handleChange}
-                         value={this.state.startData}
-                         name='startData'
-                         label='Course start' 
-                         min={this.props.startTerm}
-                         max={this.props.finishTerm}/>
-          </div>
-          <div className='col-md-4'>
-            <DatePickers handleChange={this.handleChange}
-                         value={this.state.finishData}
-                         name='finishData'
-                         label = 'Course finish'
-                         min={this.props.startTerm}
-                         max={this.props.finishTerm}/>
-          </div>
-          <div className='col-md-4'>
-            <TextField
-                id="outlined-number"
-                label="Hours"
-                style={{width: '100px'}}
-                value={this.state.hours}
-                onChange={this.handleChange}
-                type="number"
-                name='hours'
-                required
-                className={classes.textField + " NumberField"}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                margin="normal"
-              />
-          </div>
-         </div>
-            <TextField
-              id="outlined-desc"
-              label="Description"
-              placeholder="Short description (maximum 200 symbols)"
-              multiline
-              value={this.state.description}
-              style={{width:'85%', marginTop: '5%', marginBottom: '5%'}}
-              required
-              rows='4'
-              rowsMax='5'
-              name="description"
-              className={classes.textField}
-              margin="normal"
-              variant="outlined"
-              onChange={this.handleChange}
-            />
-          <Button color="primary" aria-label="Save" type='submit'>
-            Save
-          </Button>
-          <Button color="primary" aria-label="Cancel" onClick={this.props.openCloseForm}>
-            Cancel
-          </Button>
-      </FormControl>
-    </form>
-    </Paper>
-  </div>
+                  variant="outlined"
+                  onChange={this.handleChange}
+                /> */}
+                <ReactTrixRTEInput defaultValue={this.state.description}
+                                  id="outlined-desc"
+                                  label="Description"
+                                  //placeholder="Short description (maximum 200 symbols)"
+                                  multiline
+                                  value={this.state.description}
+                                  style={{heigth:'450px', width:'750px', marginTop: '5%', marginBottom: '5%'}}
+                                  required
+                                  //rows='4'
+                                  //rowsMax='5'
+                                  name="description"
+                                  //className={classes.textField}
+                                  //margin="normal"
+                                  variant="outlined"
+                                  onChange={this.handleChange}
+                />
+                  </div>
+                <Button color="primary" aria-label="Save" type='submit'>
+                  Save
+                </Button>
+                <Button color="primary" aria-label="Cancel" onClick={this.props.openCloseForm}>
+                  Cancel
+                </Button>
+              </FormControl>
+            </form>
+          </Paper>
+      </div>
     );
   }
 }

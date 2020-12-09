@@ -21,8 +21,8 @@ import orange from '@material-ui/core/colors/orange';
 
 const styles = theme => ({
   card: {
-    maxWidth: 300,
-    maxHeigth: 350
+    minWidth: 700,
+    minHeigth: 800,
   },
   media: {
     height: 140,
@@ -118,7 +118,8 @@ class Course extends React.Component {
 
   render() {
     const { classes } = this.props;
-    let actions = ''
+    let actions = '';
+    var descriptionParser = require('html-react-parser');
     if (!this.props.student)
     actions = <div> 
                 <IconButton aria-label="Delete" onClick={() => { if (window.confirm('Are you sure?')) this.props.deleteCourse(this.state.course)}}>
@@ -127,9 +128,9 @@ class Course extends React.Component {
                 <IconButton onClick={this.edit}>
                   <IconCached color='primary'/>
                 </IconButton>
-                </div>
+              </div>
     return (
-      <Card className={classes.card + " course-card card"} style={this.state.expanded ? {height: 'auto'} : {height: '380px'} }>
+      <Card className={"course-card card"} style={this.state.expanded ? {height: 'auto'} : {height: '380px', width: '80%'} }>
           {this.checkStatus()}
         <CardActionArea>
           <CardMedia
@@ -166,7 +167,7 @@ class Course extends React.Component {
             </Typography>
             <Typography component='h5' variant='h6'>Short Description:</Typography>
             <Typography paragraph>
-              {this.state.course.description}
+              {descriptionParser(this.state.course.description)}
             </Typography>
           </CardContent>
         </Collapse>

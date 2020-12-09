@@ -49,20 +49,7 @@ class Profile extends React.Component {
     if(this.state.typeUser == 'student') {
       if(group) {
         levelInfo =  level.name
-        groupInfo = group.name
-        badge = <Grid container spacing={24} justify="flex-start">
-                    <Badge style={{margin: 10}} badgeContent={courses.length}  color="primary">
-                      <Typography className={classes.padding}>Your Courses: </Typography>
-                    </Badge>
-                    {courses.map(course => { 
-                      return (
-                        <Course 
-                          level={this.state.level.name}
-                          key={course.id}
-                          course={course}
-                          student={true}/>
-                      )})}
-                </Grid>        
+        groupInfo = group.name  
       } else {
         levelInfo = 'While you don\'t have level'
         groupInfo = 'While you don\'t have group'
@@ -106,7 +93,6 @@ class Profile extends React.Component {
               </Grid>
             </Grid>
           </Grid>
-          {badge}
         </Grid>
       </div>
     );

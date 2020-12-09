@@ -309,7 +309,7 @@ class CoursesPanel extends React.Component {
           </div>
         </div>
         <Divider variant='middle'/>
-        <div className="Levels-courses card-deck">
+        <div className="Levels-courses">
           {
             this.state.pagecourses.slice(this.state.offset, this.state.offset + 12).map(course =>  
               <Course renderCourseFormForUpdate={this.renderCourseFormForUpdate}

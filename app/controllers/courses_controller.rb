@@ -4,11 +4,15 @@ class CoursesController < ApplicationController
   def create
     @course = Course.new(course_params)
     @course.level_id = @level.id
+    @course.description = params[:course][:description].html_safe
+
     render template: 'courses/one_course.json' if @course.save
   end
 
   def update
     @course = Course.find_by(id: params[:id])
+    @course.description = params[:course][:description].html_safe
+
     if params[:image] == ''
       @course.photo = nil
     else
@@ -28,7 +32,7 @@ class CoursesController < ApplicationController
     @course.destroy
     head :no_content
   end
-  
+
   private
 
   def course_params

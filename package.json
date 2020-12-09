@@ -10,6 +10,7 @@
     "babel-preset-react": "^6.24.1",
     "canvasjs": "^1.8.1",
     "date-fns": "^2.0.0-alpha.27",
+    "html-react-parser": "^0.14.2",
     "jquery": "^3.3.1",
     "material-ui-flat-pagination": "^3.2.0",
     "material-ui-next-pickers": "^0.0.19",
@@ -25,6 +26,7 @@
     "react-router-dom": "^5.2.0",
     "react-swipeable-views": "^0.13.1",
     "react-text-mask": "^5.4.3",
+    "react-trix-rte": "^1.0.7",
     "react_ujs": "^2.4.4"
   },
   "devDependencies": {
