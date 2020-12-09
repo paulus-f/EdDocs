@@ -13,14 +13,22 @@ class EnrollmentSaveController < ApplicationController
 
     if @child.nil?
       foundation = Foundation.find_by(name: params[:foundation])
-      @child = CreateStudent.perform(current_user, email_child, first_name, last_name, foundation)
+      @child = CreateStudent.perform(
+        student: nil,
+        parent: current_user,
+        student_email: email_child,
+        first_name: first_name,
+        last_name: last_name,
+        foundation: foundation,
+        group: nil
+      )
       render json: { message: "Child with email #{@child.email} was created" }, status: 200
     else
       if @child.parent.nil?
         ApproveParentWorker.perform_async(current_user.email, @child.email)
-        render json: { message: "Confirmation on email #{@child.email} was sent"}, status: 200
+        render json: { message: "Confirmation on email #{@child.email} was sent" }, status: 200
       else
-        render json: {message: 'Student already has parent. If you have a question, you can contact support!' }
+        render json: { message: 'Student already has parent. If you have a question, you can contact support!' }
       end
     end
   end
@@ -37,11 +45,11 @@ class EnrollmentSaveController < ApplicationController
     parent.children << student
     student.parent = parent
     redirect_to root_path
-  end 
+  end
 
   def get_children
     children = current_user.children
-    render json: {children: children}, status: 200
+    render json: { children: children }, status: 200
   end
 
   def update

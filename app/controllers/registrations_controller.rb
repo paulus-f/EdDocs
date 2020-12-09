@@ -108,7 +108,7 @@ class RegistrationsController < Devise::RegistrationsController
     group = @foundation.groups.find_by(name: params[:student][:foundationLvl])
     group ||= @foundation.levels.find_by(name: params[:student][:foundationLvl]).first unless group
 
-    CreateStudent.perform_async(
+    CreateStudent.perform(
       student: student,
       parent: parent,
       student_email: params[:student][:student_email],

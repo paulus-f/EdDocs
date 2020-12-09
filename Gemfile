@@ -63,6 +63,7 @@ group :development, :test do
   gem 'pry'
   gem 'rspec-rails', '~> 3.8'
   gem 'rubocop', require: false
+  gem 'railroady'
 end
 
 group :development do

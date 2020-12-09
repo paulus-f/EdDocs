@@ -20,7 +20,6 @@ class MessageBroadcastJob < ApplicationJob
   end
 
   def broadcast_to_recipient(user, message)
-
     ActionCable.server.broadcast "notify_message:#{user.id}", { by_user: message.conversation.sender, message: message.body }
 
     ActionCable.server.broadcast(

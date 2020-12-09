@@ -2,18 +2,19 @@ class CreateStudent
   class << self
     def perform(student:, parent:, student_email:, first_name:, last_name:, foundation:, group:)
       if parent && student_email != parent.email
-        create_student_via_parent(parent: parent,
-                                  student_email: student_email,
-                                  first_name: first_name,
-                                  last_name: last_name,
-                                  foundation: foundation,
-                                  group: group)
+        return create_student_via_parent(parent: parent,
+                                         student_email: student_email,
+                                         first_name: first_name,
+                                         last_name: last_name,
+                                         foundation: foundation,
+                                         group: group)
       end
 
       if student
         update_student(student: student, first_name: first_name,
                        last_name: last_name, foundation: foundation,
                        group: group)
+        student
       end
     end
 
@@ -37,6 +38,7 @@ class CreateStudent
       student.parent = parent
       parent.children << student
       parent.save
+      student
     end
   end
 end
