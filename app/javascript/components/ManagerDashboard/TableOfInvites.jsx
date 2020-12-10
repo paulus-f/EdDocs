@@ -434,19 +434,21 @@ class TableOfInvites extends React.Component {
     this.setState({inProgress: true})
     reader.onloadend = () => {
       file = reader.result
-      axios.post(`http://localhost:3000/upload`, { 
+      axios.post('/upload', { 
         file,
         selectOnly: this.state.selectOnly,
         foundation_id: this.props.foundation.id,
         authenticity_token: Functions.getMetaContent("csrf-token")
         }).then(res => {
-            this.setState({
-              inProgress: false,
-              data: JSON.parse(res.data.students).map(function(item) { return createData(item.id, item.email, item.profile.first_name, item.profile.last_name, checkAccept(item))})
-            })
-            this.props.SetTypeAlert(res.data.alertType)
-            this.props.SetMessageAlert(res.data.alertMessage)
-            this.props.OpenCloseAlert()
+            if(res.data.students) {
+              this.setState({
+                data: JSON.parse(res.data.students).map(function(item) { return createData(item.id, item.email, item.profile.first_name, item.profile.last_name, checkAccept(item))})
+              });
+            }
+            this.setState({ inProgress: false, });
+            this.props.SetTypeAlert(res.data.alertType);
+            this.props.SetMessageAlert(res.data.alertMessage);
+            this.props.OpenCloseAlert();
           })
         }
   }

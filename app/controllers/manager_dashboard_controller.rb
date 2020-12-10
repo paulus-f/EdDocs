@@ -5,7 +5,7 @@ class ManagerDashboardController < ApplicationController
   def invite_student
     @student = User.find_by(email: params.required(:invite)[:email])
     create_student unless @student
-    InviteWorker.perform_async(@student.id, @foundation.id, @password) 
+    InviteWorker.perform_async(@student.id, @foundation.id, @password)
     render json: @student, include: :profile unless @invites.include?(@student)
     @invites << @student unless @invites.include?(@student)
   end
@@ -20,6 +20,8 @@ class ManagerDashboardController < ApplicationController
   end
 
   def upload
+    return render json: { alertType: 'warning', alertMessage: 'Incorrect headers' }, status: 200 if @error
+
     @csv_table.each_with_index do |row, index|
       @succes = create_student_from_csv(row.to_hash)
       if @succes
@@ -103,9 +105,11 @@ class ManagerDashboardController < ApplicationController
   end
 
   def validate_csv_columns
-    csv_file_path = Paperclip.io_adapters.for(params[:file]).path
-    @csv_table = CSV.read(csv_file_path, headers: true)
-    render json: { alertType: 'warning', alertMessage: 'Incorrect headers' }, status: 200 unless User::CSV_HEADERS == @csv_table.headers
+    csv_file = Paperclip.io_adapters.for(params[:file])
+    return @error = true if csv_file.content_type != 'text/plain'
+
+    @csv_table = CSV.read(csv_file.path, headers: true)
+    @error = true unless User::CSV_HEADERS == @csv_table.headers
   end
 
   def calculating_statistics_form(students)
