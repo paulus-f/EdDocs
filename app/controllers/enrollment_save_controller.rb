@@ -106,6 +106,7 @@ class EnrollmentSaveController < ApplicationController
         image_base64 = signature_image
         @profile.signature.update_attribute(:signature, image_base64)
         current_user.update_attribute(:enrollment_form, true)
+        @profile.user.update_attribute(:enrollment_form, true) if current_user.parent?
         return render json: { message: 'Welcome. Waiting approving' }, status: 200
       end
     when 'Allergy'
