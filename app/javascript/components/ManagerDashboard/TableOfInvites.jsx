@@ -338,7 +338,7 @@ class TableOfInvites extends React.Component {
 
   filterInvites(value) {
     const checkAccept = this.props.CheckAccept
-    axios.post('http://localhost:3000/invites_table/filter', { 
+    axios.post('/invites_table/filter', { 
       foundation_id: this.props.foundation.id,
       selectOnly: value,
       authenticity_token: Functions.getMetaContent("csrf-token")
@@ -390,7 +390,7 @@ class TableOfInvites extends React.Component {
   DeleteInvite() {
     const selected = this.state.selected;
     const checkAccept = this.props.CheckAccept
-    axios.post(`http://localhost:3000/delete_invite`, { 
+    axios.post('/delete_invite', { 
       selected,
       foundation_id: this.props.foundation.id,
       selectOnly: this.state.selectOnly,
