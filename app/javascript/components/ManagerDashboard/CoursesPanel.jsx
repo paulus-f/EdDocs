@@ -51,10 +51,10 @@ class CoursesPanel extends React.Component {
       level: 'all',
       course: '',
       levelupdate: '',
-      courses: this.props.courses,
-      pagecourses: this.props.courses,
+      courses: this.props.courses || [],
+      pagecourses: this.props.courses || [],
       offset: 0,
-      total: this.props.courses.length,
+      total: this.props.courses ? this.props.courses.length : 0,
       selectOnly: 'all'
     };
     this.openCloseForm = this.openCloseForm.bind(this)

@@ -3,10 +3,9 @@
 class SessionsController < Devise::SessionsController
   def create
     resource = warden.authenticate(auth_options)
-
     if resource
       sign_in(resource_name, resource)
-      redirect_to :root
+      #redirect_to :root
     else
       render json: { message: 'Error in Sigh In' }
     end

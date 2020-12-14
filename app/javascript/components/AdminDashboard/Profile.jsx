@@ -68,11 +68,13 @@ class Profile extends React.Component {
                       }).format(new Date(current_user.created_at)) } />
                   </ListItem>
                 </List>
-                <ul className="nav justify-content-start">
+                {
+                  // TODO: will add
+                  /* <ul className="nav justify-content-start">
                   <li className="nav-item">
                     <a className="nav-link" href="/users/password/edit"> Change Password</a>
                   </li>
-                </ul>
+                </ul> */}
               </Grid>
             </Grid>
           </Grid>

@@ -46,12 +46,13 @@ class Group extends React.Component {
       edit: false,
       newgroupname: this.props.group.name,
       end_academic_year: null
-    }
+    };
 
-    this.Edit = this.Edit.bind(this)
-    this.handleGroupUpdate = this.handleGroupUpdate.bind(this)
-    this.renderFormGroup = this.renderFormGroup.bind(this)
-    this.handleChange = this.handleChange.bind(this)
+    this.Edit = this.Edit.bind(this);
+    this.handleGroupUpdate = this.handleGroupUpdate.bind(this);
+    this.renderFormGroup = this.renderFormGroup.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.kickStudentFormGroup = this.kickStudentFormGroup.bind(this);
   }
 
   componentDidMount(){
@@ -166,7 +167,7 @@ class Group extends React.Component {
                                       primary={student.profile.last_name +" "+ student.profile.first_name}
                                     />
                                     <ListItemSecondaryAction>
-                                      <IconButton aria-label="Delete" onClick={() => { if (window.confirm('Are you sure?')) this.KickStudentFormGroup(student)}}>
+                                      <IconButton aria-label="Delete" onClick={() => { if (window.confirm('Are you sure?')) this.kickStudentFormGroup(student)}}>
                                         <IconDelete />
                                       </IconButton>
                                     </ListItemSecondaryAction>

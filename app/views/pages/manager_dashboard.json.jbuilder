@@ -3,6 +3,7 @@ json.invites @foundation.invites.eager_load(:profile) do |invite|
   json.id invite.id
   json.profile invite.profile
 end
+
 json.foundation @foundation
 json.foundationImage @foundation.image.attached? ? url_for(@foundation.image) : asset_url('not_found_foundation_image')
 json.foundationImageNotFound asset_url('not_found_foundation_image')
@@ -33,14 +34,16 @@ json.levels @foundation.levels.eager_load(:courses, :groups) do |level|
   json.name level.name
   json.id level.id
 end
+
 json.requests @foundation.requests.includes(:level, :group, :parent, :student) do |request|
-  json.parent request.parent.email
-  json.student request.student.email
-  json.id request.id
-  json.student_id request.student.id
-  json.level request.level.name
-  json.group request.group.name
+  json.parent request&.parent&.email
+  json.student request&.student&.email
+  json.id request&.id
+  json.student_id request&.student&.id
+  json.level request&.level&.name
+  json.group request&.group&.name
 end
+
 json.students @foundation.students.includes(:profile, :group) do |student|
   json.email student.email
   json.id student.id
@@ -54,6 +57,7 @@ json.students @foundation.students.includes(:profile, :group) do |student|
     json.level ''
   end
 end
+
 json.courses @foundation.courses do |course|
   json.name course.name
   json.id course.id
@@ -64,8 +68,10 @@ json.courses @foundation.courses do |course|
   json.level_id course.level_id
   json.image_url asset_url(course.photo)
 end
+
 json.studentsWithoutGroup @foundation.students.where(group_id: nil) do |student|
   json.profile student.profile
   json.id student.id
 end
+
 json.imageNotFound asset_url('notfound.png')

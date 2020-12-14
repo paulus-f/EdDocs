@@ -44,7 +44,7 @@ class User < ApplicationRecord
   end
 
   def university_student?
-    student? && foundation&.type_foundation == 'university'
+    student? && foundation&.type_foundation == 'university' && parent.nil?
   end
 
   def create_profile

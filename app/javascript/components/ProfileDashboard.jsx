@@ -107,6 +107,13 @@ class ProfileDashboard extends React.Component {
   };
 
   renderListStudent() {
+    if(!this.props.group) {
+      return (
+        <h1>
+          You haven't a group. Please contact to Support.
+        </h1>
+      );
+    }
     return(
       <div style={{marginTop:20, marginLeft: 100}}>
         <h3>{this.props.group.name} of {this.props.level.name}:</h3>

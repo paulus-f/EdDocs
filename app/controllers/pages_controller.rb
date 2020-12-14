@@ -29,9 +29,13 @@ class PagesController < ApplicationController
           return
         end
 
-        return waiting_parent_or_student_page if current_user.university_student? && !current_user.enrollment_form
+        return waiting_parent_or_student_page if current_user.university_student? || !current_user.enrollment_form
 
-        return render 'profile_dashboard' if current_user.parent? || current_user.student?
+        if current_user.approve && (current_user.parent? || current_user.student?)
+          return render 'profile_dashboard'
+        else
+          return render 'waiting_page'
+        end
       end
     end
     @foundations = GetUrlAndObjectFoundationService.get(@foundations).to_json

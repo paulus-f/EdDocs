@@ -251,12 +251,15 @@ class ManagerDashboard extends React.Component {
               </ListItemIcon>
               <ListItemText classes={{ primary: classes.primary }} inset primary="Requests"/>
             </MenuItem>
-            <MenuItem className={classes.menuItem} onClick={this.handleSelect} id='reports'>
+            {
+              // TODO: future feature
+            }
+            {/* <MenuItem className={classes.menuItem} onClick={this.handleSelect} id='reports'>
               <ListItemIcon className={classes.icon}>
                 <TimelineIcon />
               </ListItemIcon>
               <ListItemText classes={{ primary: classes.primary }} inset primary="Statistics"/>
-            </MenuItem>
+            </MenuItem> */}
           </MenuList>
         </Paper>
     );

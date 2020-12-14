@@ -13,6 +13,7 @@ class CertificatesController < ApplicationController
                layout: 'pdf.html',
                orientation: 'Landscape',
                lowquality: true,
+               encoding: 'utf8',
                zoom: 1,
                dpi: 75
       end
