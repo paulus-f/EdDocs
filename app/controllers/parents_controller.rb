@@ -30,7 +30,7 @@ class ParentsController < ApplicationController
     if current_user.role == 'admin'
       child = User.find_by(id: child_id)
     else
-      request = current_user.foundation.requests.find_by(student_id: child_id)
+      request = current_user.foundation&.requests&.find_by(student_id: child_id)
       child = current_user.foundation.students.find_by(id: child_id)
       child = request.student if request && !child
     end
