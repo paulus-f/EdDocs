@@ -4,7 +4,7 @@ class GetUrlAndObjectFoundationService
     def get(foundations)
       array_foundations = []
       foundations.each do |foundation|
-        foundation_url = ""
+        foundation_url = ''
         students_count = foundation.students.count
         foundation_url = foundation.image.attached? ? foundation.get_url : NOT_FOUND_IMAGE_PATH
         array_foundations.push(foundation: foundation, foundation_url: foundation_url, students_count: students_count)

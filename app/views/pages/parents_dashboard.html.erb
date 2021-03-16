@@ -1,6 +1,1 @@
-<%= react_component('ParentDashboard',
-                    {
-                        children: @children,
-                        current_user: current_user
-                    })
-%>
+<%= react_component('ParentDashboard', JSON.parse(render(template: 'parents_dashboard.json'))) %>

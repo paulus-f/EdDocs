@@ -57,8 +57,3 @@ if current_user.student?
     json.levelName certificate.level.name
   end
 end
-
-if current_user.parent?
-  json.typeUser 'parent'
-  json.children current_user.children.all
-end

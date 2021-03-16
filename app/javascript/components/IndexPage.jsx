@@ -33,9 +33,6 @@ const styles = theme => ({
   },
 });
 
-
-
-
 class IndexPage extends React.Component {
   constructor(props){
     super(props)

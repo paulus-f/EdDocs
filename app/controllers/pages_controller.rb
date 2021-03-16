@@ -3,46 +3,18 @@ class PagesController < ApplicationController
   before_action :authenticate_user!, except: %i[index show support foundation_form]
 
   def index
-    @foundations = Foundation.all
+    @foundations = GetUrlAndObjectFoundationService.get(Foundation.all).to_json
+
     if current_user
-      if current_user.admin?
-        @users = User.all.to_json
-        @foundations = @foundations.to_json(include: %i[managers students])
-        return render 'admin_dashboard'
-      end
-
-      unless current_user.approve
-        @foundations = GetUrlAndObjectFoundationService.get(@foundations).to_json
-
-        return waiting_parent_or_student_page if current_user.parent?
-        return waiting_manager_page if current_user.manager?
-        return render 'waiting_page' if current_user.student?
-      else
-        if current_user.manager?
-          @foundation = current_user.foundation
-          if @foundation.nil?
-            @foundations = GetUrlAndObjectFoundationService.get(@foundations).to_json
-            foundation_is_nil
-          else
-            redirect_to manager_dashboard_path if current_user.manager?
-          end
-          return
-        end
-
-        return waiting_parent_or_student_page if current_user.university_student? || !current_user.enrollment_form
-
-        if current_user.approve && (current_user.parent? || current_user.student?)
-          return render 'profile_dashboard'
-        else
-          return render 'waiting_page'
-        end
-      end
+      return render_waiting_page      unless current_user.approve
+      return render 'admin_dashboard' if current_user.admin?
+      return render_manager_page      if current_user.manager?
+      return render_profile_page      if current_user.parent? || current_user.student?
+        
+      render 'waiting_page'
+    else
+      render 'index'
     end
-    @foundations = GetUrlAndObjectFoundationService.get(@foundations).to_json
-    render 'index'
-  end
-
-  def apply_foundation_form
   end
 
   def manager_dashboard
@@ -61,16 +33,37 @@ class PagesController < ApplicationController
 
   private
 
+  def render_waiting_page
+    return waiting_manager_page if current_user.manager?
+    return render 'waiting_page' if current_user.student? || current_user.parent?
+  end
+
+  def render_manager_page
+    if current_user.foundation.nil?
+      foundation_is_nil
+    else
+      redirect_to manager_dashboard_path
+    end
+  end
+
+  def render_profile_page
+    return profile_registration_page unless current_user.enrollment_form
+
+    render 'profile_dashboard'
+  end
+
   def waiting_manager_page
     return render 'waiting_page' if current_user.foundation.nil?
 
-    current_user.foundation.address ? (render 'waiting_page') : (render 'foundation_form')
+    current_user.foundation.address ? render('waiting_page') : render('foundation_form')
   end
 
-  def waiting_parent_or_student_page
-    @children_profile = current_user.university_student? ? current_user.profile : current_user.children[0].profile
-
-    current_user.enrollment_form ? (render 'waiting_page') : (render 'registration_children')
+  def profile_registration_page
+    render('registration_children', 
+      locals: { 
+        profile: current_user.university_student? ? current_user.profile : current_user.children[0].profile 
+      }
+    )
   end
 
   def foundation_is_nil
