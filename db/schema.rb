@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_06_002059) do
+ActiveRecord::Schema.define(version: 2021_03_22_222454) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -68,6 +68,7 @@ ActiveRecord::Schema.define(version: 2019_03_06_002059) do
     t.integer "sender_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "recipient_type", default: "User"
     t.index ["recipient_id", "sender_id"], name: "index_conversations_on_recipient_id_and_sender_id", unique: true
     t.index ["recipient_id"], name: "index_conversations_on_recipient_id"
     t.index ["sender_id"], name: "index_conversations_on_sender_id"
@@ -254,6 +255,19 @@ ActiveRecord::Schema.define(version: 2019_03_06_002059) do
     t.index ["group_id"], name: "index_users_on_group_id"
     t.index ["parent_type", "parent_id"], name: "index_users_on_parent_type_and_parent_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  end
+
+  create_table "video_channels", force: :cascade do |t|
+    t.string "name"
+    t.boolean "open"
+    t.bigint "creator_id"
+    t.bigint "group_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "conversation_id"
+    t.index ["conversation_id"], name: "index_video_channels_on_conversation_id"
+    t.index ["creator_id"], name: "index_video_channels_on_creator_id"
+    t.index ["group_id"], name: "index_video_channels_on_group_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

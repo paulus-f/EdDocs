@@ -1,7 +1,7 @@
 class Conversation < ApplicationRecord
   has_many :messages, dependent: :destroy
-  belongs_to :sender, foreign_key: :sender_id, class_name: "User"
-  belongs_to :recipient, foreign_key: :recipient_id, class_name: "User"
+  belongs_to :sender, foreign_key: :sender_id, class_name: 'User'
+  belongs_to :recipient, foreign_key: :recipient_id, polymorphic: true
 
   validates :sender_id, uniqueness: { scope: :recipient_id }
 
@@ -11,11 +11,11 @@ class Conversation < ApplicationRecord
     )
   end
 
-  def self.get(sender_id, recipient_id)
+  def self.get(sender_id, recipient_id, recipient_type = 'User')
     conversation = between(sender_id, recipient_id).first
     return conversation if conversation.present?
 
-    create(sender_id: sender_id, recipient_id: recipient_id)
+    create(sender_id: sender_id, recipient_id: recipient_id, recipient_type: recipient_type)
   end
 
   def opposed_user(user)
