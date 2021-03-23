@@ -28,6 +28,8 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Avatar from '@material-ui/core/Avatar';
 import FoundationShow from './FoundationShow';
 import CoursesPanel from './ManagerDashboard/CoursesPanel';
+import VideoCallIcon from '@material-ui/icons/VideoCall'
+import ProfileCalls from './ProfileDashboard/ProfileCalls'
 
 const styles = theme => ({
   menuItem: {
@@ -203,6 +205,11 @@ class ProfileDashboard extends React.Component {
                                 managersCount={this.props.managers_count}
                               />});
         break;
+      case 'calls':
+        this.setState({
+          point: <ProfileCalls/>
+        });
+        break;  
     }
 };
 
@@ -254,6 +261,14 @@ class ProfileDashboard extends React.Component {
                  </ListItemIcon>
                  <ListItemText classes={{ primary: classes.primary }} inset primary="My Courses"/>
                </MenuItem>
+
+               <MenuItem className={classes.menuItem} onClick={this.handleSelect} id='calls'>
+                 <ListItemIcon className={classes.icon}>
+                   <VideoCallIcon />
+                 </ListItemIcon>
+                 <ListItemText classes={{ primary: classes.primary }} inset primary="Calls"/>
+               </MenuItem>
+
              </div>;
     } 
 

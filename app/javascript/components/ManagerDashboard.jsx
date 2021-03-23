@@ -7,6 +7,7 @@ import { withStyles } from '@material-ui/core/styles';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import SchoolIcon from '@material-ui/icons/School';
+import VideoCallIcon from '@material-ui/icons/VideoCall'
 import DomainIcon from '@material-ui/icons/Domain';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import GroupIcon from '@material-ui/icons/Group';
@@ -22,7 +23,7 @@ import LevelsPanel from './ManagerDashboard/LevelsPanel';
 import CoursesPanel from './ManagerDashboard/CoursesPanel';
 import Functions from '../utils/Functions';
 import axios from 'axios';
-import TimelineIcon from '@material-ui/icons/Timeline'
+import ManagerCalls from './ManagerDashboard/ManagerCalls'
 import Reports from './ManagerDashboard/Reports'
 import Profile from './ManagerDashboard/Profile';
 
@@ -195,14 +196,20 @@ class ManagerDashboard extends React.Component {
                                                SetMessageAlert={this.SetMessageAlert}
                                                SetTypeAlert={this.SetTypeAlert}/> })
         break;
+      case 'calls':
+        this.setState({
+          point: <ManagerCalls courses={this.state.courses}
+                               levels={this.props.levels}
+                               channels={[]}/>
+        });
+        break;  
       case 'reports':
         this.setState({
           point: <Reports foundationId={this.state.foundation.id}/>
         });
         break;
-  }
-};
-
+    }
+  };
 
   ListItemComposition() {
     const { classes } = this.props;
@@ -250,6 +257,12 @@ class ManagerDashboard extends React.Component {
                 <DraftsIcon />
               </ListItemIcon>
               <ListItemText classes={{ primary: classes.primary }} inset primary="Requests"/>
+            </MenuItem>
+            <MenuItem className={classes.menuItem} onClick={this.handleSelect} id='calls'>
+              <ListItemIcon className={classes.icon}>
+                <VideoCallIcon />
+              </ListItemIcon>
+              <ListItemText classes={{ primary: classes.primary }} inset primary="Calls"/>
             </MenuItem>
             {
               // TODO: future feature
