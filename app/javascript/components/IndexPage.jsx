@@ -15,8 +15,9 @@ import Pagination from "material-ui-flat-pagination";
 import AddIcon from '@material-ui/icons/Add';
 import Fab from '@material-ui/core/Fab';
 import Grid from '@material-ui/core/Grid';
-import CardFoundation from './IndexPage/CardFoundation'
+import CardFoundation from './IndexPage/CardFoundation';
 import { Route, BrowserRouter } from 'react-router-dom';
+
 
 const theme = createMuiTheme({
   typography: {

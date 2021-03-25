@@ -1,12 +1,27 @@
 import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles, makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import PropTypes from "prop-types";
-import classNames from 'classnames';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl'
 import axios from 'axios';
-import { lv } from 'date-fns/locale';
+import AddIcon from '@material-ui/icons/Add';
+import { Button } from "@material-ui/core";
+import Functions from '../../utils/Functions';
+import Avatar from '@material-ui/core/Avatar';
+import Chip from '@material-ui/core/Chip';
+import FaceIcon from '@material-ui/icons/Face';
+import DoneIcon from '@material-ui/icons/Done';
+
+// const useStyles = makeStyles((theme) => ({
+//   root: {
+//     display: 'flex',
+//     justifyContent: 'center',
+//     flexWrap: 'wrap',
+//     '& > *': {
+//       margin: theme.spacing(0.5),
+//     },
+//   },
+// }));
 
 const styles = theme => ({
   container: {
@@ -25,7 +40,13 @@ class ManagerCalls extends React.Component {
     super(props);
     this.state = {
       channels: props.channels,
-      groups: props.levels.map(lvl => lvl.groups).flat(),
+      groups: props.levels.map((lvl) => {
+        lvl.groups = lvl.groups.map(group => {
+          group.level = lvl;
+          return group;
+        });
+        return lvl.groups;
+      }).flat(),
       courses: props.courses,
       selectedGroup: null, 
       selectedCourse: null 
@@ -33,71 +54,105 @@ class ManagerCalls extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.updateGroup = this.updateGroup.bind(this);
     this.updateCourse = this.updateCourse.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
+
+  updateCourse = (value) => {
+    this.setState({ selectedCourse: value });
+  };
 
   updateGroup = (value) => {
     this.setState({ selectedGroup: value });
   }
 
-  updateCourse = (value) => {
-    this.setState({ selectedCourse: value });
-  }
-
   handleChange = name => event => {
-    this.setState({
-      [name]: event.target.value,
-    });
     switch(name)
     {
       case 'course':
-        updateCourse(event.target.value)
+        this.updateCourse(event.target.value)
         break;
       case 'group':
-        updateGroup(event.target.value)
+        this.updateGroup(event.target.value)
         break;
     }
+  };
+
+  handleSubmit = event => {
+    event.preventDefault();
+
+    axios.post('/video_channels/', {
+      group_id: this.state.selectedGroup,
+      course_id: this.state.selectedCourse,
+      authenticity_token: Functions.getMetaContent("csrf-token")
+  })
+    .then(res => {
+      const { channels } = this.state
+      this.setState({
+        channels: [...channels, res.data.video_channel],
+      });
+    })
+    .catch(err => {
+      console.log(err);
+    });
   };
 
   render() {
     const {channels, groups, courses} = this.state;
     const {classes} = this.props;
+    //const newClasses = useStyles();
 
     return (
       <div id='managerCalls'>
-        <FormControl>  
-          <TextField
-            select
-            label="Select"
-            className={classes.textField}
-            value={this.state.selectedGroup}
-            onChange={this.handleChange('group')}
-            margin="normal"
-            required
-            variant="outlined"
-          >
-            {groups.map(option => (
-              <MenuItem key={option.id} value={option.name}>
-                {option.name}
-              </MenuItem>
-            ))}
-          </TextField>
-          <TextField
-            select
-            label="Select"
-            className={classes.textField}
-            value={this.state.selectedCourse}
-            onChange={this.handleChange('course')}
-            margin="normal"
-            required
-            variant="outlined"
-          >
-            {courses.map(course => (
-              <MenuItem key={course.id} value={course.name}>
-                {course.name}
-              </MenuItem>
-            ))}
-          </TextField>
-        </FormControl>
+        <form autoComplete="off" onSubmit={this.handleSubmit}>
+          <FormControl>
+            <TextField
+              select
+              label="Select"
+              className={classes.textField}
+              value={this.state.selectedGroup}
+              onChange={this.handleChange('group')}
+              margin="normal"
+              required
+              variant="outlined"
+            >
+              {groups.map(option => (
+                <MenuItem key={option.id} value={option.id}>
+                  {`${option.level.name} - ${option.name}`}
+                </MenuItem>
+              ))}
+            </TextField>
+            <TextField
+              select
+              label="Select"
+              className={classes.textField}
+              value={this.state.selectedCourse}
+              onChange={this.handleChange('course')}
+              margin="normal"
+              required
+              variant="outlined"
+            >
+              {courses.map(course => (
+                <MenuItem key={course.id} value={course.id}>
+                  {course.name}
+                </MenuItem>
+              ))}
+            </TextField>
+            <Button type="submit" color="primary" aria-label="Add">
+              <AddIcon />
+            </Button>
+          </FormControl>
+        </form>
+        <br/>
+        <div>
+          {channels.map((channel) =>{
+             return (
+               <Chip  key={channel.id}
+                      label={channel.name}
+                      clickable
+                      color="primary"/>
+             );
+          })}
+        </div>
       </div>
     );
   }

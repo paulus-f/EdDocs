@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   get '/new_foundation', to: 'pages#foundation_form', as: :foundation_form
   get '/manager_dashboard', to: 'pages#manager_dashboard'
   resources :profiles
+  resources :video_channels
 
   resources :certificates do
   end
