@@ -22,4 +22,15 @@ class VideoChannelsController < ApplicationController
   def show
     @video_channel = VideoChannel.find(params[:id])
   end
+
+  def create_connection
+    head :no_content
+    ActionCable.server.broadcast 'connection_channel', connection_params
+  end
+
+  private
+  
+  def connection_params
+    params.require(:connection).permit(:type, :from, :to, :sdp, :candidate)
+  end
 end

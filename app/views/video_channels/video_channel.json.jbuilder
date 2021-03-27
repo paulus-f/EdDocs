@@ -7,3 +7,5 @@ json.videoChannel do
   json.conversation @video_channel.conversation
   json.course @video_channel.course
 end
+
+json.currentUser current_user

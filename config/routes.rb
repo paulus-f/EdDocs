@@ -13,8 +13,12 @@ Rails.application.routes.draw do
   post '/support', to: 'pages#support'
   get '/new_foundation', to: 'pages#foundation_form', as: :foundation_form
   get '/manager_dashboard', to: 'pages#manager_dashboard'
+
   resources :profiles
-  resources :video_channels
+
+  resources :video_channels do
+    post '/create_connection', to: 'video_channels#create_connection'
+  end
 
   resources :certificates do
   end
