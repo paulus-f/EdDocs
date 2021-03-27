@@ -1,5 +1,6 @@
 class AdminDashboardController < ApplicationController
   before_action :authenticate_user!
+
   def get_manager_dashboard
     @foundation = Foundation.find_by(id: params[:foundation_id].to_i)
     authorize! :manager, @foundation

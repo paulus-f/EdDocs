@@ -13,7 +13,7 @@ class VideoChannelsController < ApplicationController
       group_id: params[:group_id],
       course_id: params[:course_id],
       conversation_id: conversation.id,
-      name: "#{group.name}-#{course.name}-#{amount_vc + 1}"
+      name: "#{group.level&.name}-#{group.name}-#{course.name}-##{amount_vc + 1}"
     )
 
     render json: { video_channel: video_channel }, status: 200

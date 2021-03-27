@@ -11,17 +11,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Chip from '@material-ui/core/Chip';
 import FaceIcon from '@material-ui/icons/Face';
 import DoneIcon from '@material-ui/icons/Done';
-
-// const useStyles = makeStyles((theme) => ({
-//   root: {
-//     display: 'flex',
-//     justifyContent: 'center',
-//     flexWrap: 'wrap',
-//     '& > *': {
-//       margin: theme.spacing(0.5),
-//     },
-//   },
-// }));
+import { Redirect, withRouter, Link } from 'react-router-dom';
 
 const styles = theme => ({
   container: {
@@ -49,12 +39,15 @@ class ManagerCalls extends React.Component {
       }).flat(),
       courses: props.courses,
       selectedGroup: null, 
-      selectedCourse: null 
+      selectedCourse: null,
+      selectedCall: null,
+      redirectToCall: false,
     };
     this.handleChange = this.handleChange.bind(this);
     this.updateGroup = this.updateGroup.bind(this);
     this.updateCourse = this.updateCourse.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChipClick = this.handleChipClick.bind(this);
   }
 
   updateCourse = (value) => {
@@ -96,10 +89,15 @@ class ManagerCalls extends React.Component {
     });
   };
 
+  handleChipClick = id => {
+    this.setState({
+      selectedCall: id
+    });
+  }
+
   render() {
-    const {channels, groups, courses} = this.state;
+    const {channels, groups, courses, redirectToCall, selectedCall} = this.state;
     const {classes} = this.props;
-    //const newClasses = useStyles();
 
     return (
       <div id='managerCalls'>
@@ -145,12 +143,17 @@ class ManagerCalls extends React.Component {
         <br/>
         <div>
           {channels.map((channel) =>{
-             return (
-               <Chip  key={channel.id}
+            return (
+              <Link target={"_blank"}
+                    to={`/video_channels/${channel.id}`} 
+                    activeClassName='active'>
+                <Chip key={channel.id}
                       label={channel.name}
                       clickable
-                      color="primary"/>
-             );
+                      onClick={(e) => this.handleChipClick(channel.id)}
+                      color='primary' />
+              </Link>
+            );
           })}
         </div>
       </div>
@@ -158,4 +161,4 @@ class ManagerCalls extends React.Component {
   }
 }
 
-export default withStyles(styles)(ManagerCalls);
+export default withRouter(withStyles(styles)(ManagerCalls));

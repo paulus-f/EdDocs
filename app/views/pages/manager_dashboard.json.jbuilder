@@ -74,4 +74,14 @@ json.studentsWithoutGroup @foundation.students.where(group_id: nil) do |student|
   json.id student.id
 end
 
+json.channels VideoChannel.where(creator_id: current_user.id) do |channel|
+  json.id channel.id
+  json.name channel.name
+  json.open channel.open || false
+  json.creator_id channel.creator_id
+  json.group_id channel.group_id
+  json.conversation_id channel.conversation_id
+  json.course_id channel.course_id
+end
+
 json.imageNotFound asset_url('notfound.png')

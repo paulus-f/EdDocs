@@ -26,6 +26,7 @@ import axios from 'axios';
 import ManagerCalls from './ManagerDashboard/ManagerCalls'
 import Reports from './ManagerDashboard/Reports'
 import Profile from './ManagerDashboard/Profile';
+import { Route, BrowserRouter, Link, Switch, Redirect, withRouter } from 'react-router-dom';
 
 const styles = theme => ({
   menuItem: {
@@ -200,7 +201,7 @@ class ManagerDashboard extends React.Component {
         this.setState({
           point: <ManagerCalls courses={this.state.courses}
                                levels={this.props.levels}
-                               channels={[]}/>
+                               channels={this.props.channels}/>
         });
         break;  
       case 'reports':
@@ -279,13 +280,19 @@ class ManagerDashboard extends React.Component {
   }
   render() {
     return (
-      <div className='form-row ManagerDashboard'>
-        <div className="col-md-2 MenuList">
-          {this.ListItemComposition()}
-          <Alert onClose={this.CloseAlert.bind(this)} alertOpen={this.state.alertOpen} alertType={this.state.alertType} alertMessage={this.state.alertMessage}/>
-        </div>
-          {this.state.point}
-      </div>
+      <BrowserRouter>
+        <Switch>
+          <Route>
+            <div className='form-row ManagerDashboard'>
+              <div className="col-md-2 MenuList">
+                {this.ListItemComposition()}
+                <Alert onClose={this.CloseAlert.bind(this)} alertOpen={this.state.alertOpen} alertType={this.state.alertType} alertMessage={this.state.alertMessage}/>
+              </div>
+                {this.state.point}
+            </div>
+          </Route>
+        </Switch>
+      </BrowserRouter>
     )
   }
 }
