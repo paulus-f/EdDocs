@@ -20,6 +20,6 @@ class VideoChannelsController < ApplicationController
   end
 
   def show
-    
+    @video_channel = VideoChannel.find(params[:id])
   end
 end
