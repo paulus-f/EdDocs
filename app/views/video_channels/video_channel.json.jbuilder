@@ -9,3 +9,5 @@ json.videoChannel do
 end
 
 json.currentUser current_user
+
+json.isCreator current_user.id == @video_channel.creator_id
