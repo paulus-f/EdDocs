@@ -21,6 +21,7 @@ class VideoChannelsController < ApplicationController
 
   def show
     @video_channel = VideoChannel.find(params[:id])
+    no_permission unless @video_channel.user_has_access?(current_user.id)
   end
 
   def create_connection
@@ -29,6 +30,10 @@ class VideoChannelsController < ApplicationController
   end
 
   private
+
+  def no_permission
+    render text: 'Not Found', status: '404'
+  end
   
   def connection_params
     params.require(:connection).permit(:type, :from, :to, :sdp, :candidate)

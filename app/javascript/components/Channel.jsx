@@ -60,12 +60,17 @@ class Channel extends React.Component {
   handleJoinSession = async () => {
     let {currentUser} = this.state;
 
-    App.cable.subscriptions.create('ConnectionChannel', {
-      connected: () => {
-        this.broadcastData({
-          type: JOIN_ROOM,
-          from: this.state.currentUser.id,
-        });
+    App.cable.subscriptions.create(
+      {
+        channel: 'ConnectionChannel',
+        video_channel_id: this.state.videoChannel.id
+      }, 
+      {
+        connected: () => {
+          this.broadcastData({
+            type: JOIN_ROOM,
+            from: this.state.currentUser.id,
+          });
       },
       received: (data) => {
         console.log("received", data);
