@@ -1,6 +1,6 @@
 class ConnectionChannel < ApplicationCable::Channel
   def subscribed
-    stream_from "connection_channel-#{params[:video_channel_id]}"
+    stream_from "connection_channel_#{params[:video_channel_id]}"
   end
 
   def unsubscribed

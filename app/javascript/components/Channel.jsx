@@ -24,6 +24,8 @@ class Channel extends React.Component {
       currentUser: props.currentUser,
       isCreator: props.isCreator,
       isOpenAlert: true,
+      isConnected: false,
+      subscription: null
     }
 
     this.initMediaDevices = this.initMediaDevices.bind(this);
@@ -58,9 +60,9 @@ class Channel extends React.Component {
   }
   
   handleJoinSession = async () => {
-    let {currentUser} = this.state;
+    let {currentUser, isConnected } = this.state;
 
-    App.cable.subscriptions.create(
+    let subscription = await App.cable.subscriptions.create(
       {
         channel: 'ConnectionChannel',
         video_channel_id: this.state.videoChannel.id
@@ -87,17 +89,28 @@ class Channel extends React.Component {
           return;
         }
       },
+      rejected: (data) => {
+        console.log(data);
+      }
+    });
+
+    this.setState({
+      isConnected: !isConnected,
+      subscription: subscription
     });
   };
   
   handleLeaveSession = () => {
-    const { pcPeers, currentUser } = this.state;
+    const {pcPeers, currentUser, isConnected, subscription} = this.state;
 
     for (let user in pcPeers) {
       pcPeers[user].close();
     }
+
+    App.cable.subscriptions.remove(subscription);
     this.setState({
-      pcPeers: {}
+      pcPeers: {},
+      isConnected: !isConnected,
     });
   
     this.broadcastData({
@@ -128,31 +141,26 @@ class Channel extends React.Component {
     let pc = new RTCPeerConnection(ice);
     const elementRef = this.addRemoteVideo(currentUser);
 
-    pcPeers[userId] = pc;
-    this.setState({
-      pcPeers: pcPeers
-    });
-
     for (const track of localstream.getTracks()) {
       pc.addTrack(track, localstream);
     }
   
-    isOffer &&
-      pc
-        .createOffer()
-        .then((offer) => {
-          return pc.setLocalDescription(offer);
-        })
+    if(isOffer) {
+      pc.createOffer()
+        .then((offer) => pc.setLocalDescription(offer))
         .then(() => {
-          this.broadcastData({
-            type: EXCHANGE,
-            from: currentUser.id,
-            to: userId,
-            sdp: JSON.stringify(pc.localDescription),
-          });
+          setTimeout(() => {
+            this.broadcastData({
+              type: EXCHANGE,
+              from: currentUser.id,
+              to: userId,
+              sdp: JSON.stringify(pc.localDescription),
+            });
+          }, 0);
         })
         .catch(this.logError);
-    
+    }
+
     pc.onicecandidate = (event) => {
       event.candidate &&
         this.broadcastData({
@@ -172,7 +180,7 @@ class Channel extends React.Component {
     };
   
     pc.oniceconnectionstatechange = () => {
-      if (pc.iceConnectionState == "disconnected") {
+      if (pc.iceConnectionState == 'disconnected') {
         console.log("Disconnected:", userId);
         this.broadcastData({
           type: REMOVE_USER,
@@ -180,47 +188,47 @@ class Channel extends React.Component {
         });
       }
     };
-  
+
+    pcPeers[userId] = pc;
+    this.setState({
+      pcPeers: pcPeers
+    });
     return pc;
   };
   
   exchange = async (data) => {
     let { currentUser, pcPeers } = this.state
-    let pc;
-  
-    if (!pcPeers[data.from]) {
-      pc = await this.createPC(data.from, false);
-    } else {
-      pc = pcPeers[data.from];
-    }
-  
+    let pc = await !pcPeers[data.from] ? this.createPC(data.from, false) :  pcPeers[data.from];
+
     if (data.candidate) {
       //CHECK
-      await pc.addIceCandidate(new RTCIceCandidate(JSON.parse(data.candidate)))
-              .then(() => console.log("Ice candidate added"))
-              .catch(this.logError);
+      pc.addIceCandidate(new RTCIceCandidate(JSON.parse(data.candidate)))
+        .then(() => console.log("Ice candidate added"))
+        .catch(this.logError);
     }
   
     if (data.sdp) {
       const sdp = JSON.parse(data.sdp);
-      pc.setRemoteDescription(new RTCSessionDescription(sdp))
-        .then(() => {
-          if (sdp.type === "offer") {
-            pc.createAnswer()
-              .then((answer) => {
-                return pc.setLocalDescription(answer);
-              })
-              .then(() => {
-                this.broadcastData({
-                  type: EXCHANGE,
-                  from: currentUser.id,
-                  to: data.from,
-                  sdp: JSON.stringify(pc.localDescription),
+      if(sdp && !sdp.candidate) {
+        pc.setRemoteDescription(new RTCSessionDescription(sdp))
+          .then(() => {
+            if (sdp.type === "offer") {
+              pc.createAnswer()
+                .then((answer) => {
+                  return pc.setLocalDescription(answer);
+                })
+                .then(() => {
+                  this.broadcastData({
+                    type: EXCHANGE,
+                    from: currentUser.id,
+                    to: data.from,
+                    sdp: JSON.stringify(pc.localDescription),
+                  });
                 });
-              });
-          }
+            }
         })
         .catch(this.logError);
+      }
     }
   };
   
@@ -258,16 +266,25 @@ class Channel extends React.Component {
   };
 
   render() {
-    const { videoChannel, channels, isCreator} = this.state;
+    const { videoChannel, channels, isCreator, isConnected} = this.state;
 
     const openButton = <Button variant='contained' color='primary' onClick={this.handleJoinSession}>
                          Open
                        </Button>
+
+    const connectButton = <Button variant='contained' color='primary' onClick={this.handleJoinSession}>
+                            Connect
+                          </Button>
+
+                          
+
+    const leaveButton = <Button variant='contained' color='primary' onClick={this.handleLeaveSession}>
+                          Close
+                        </Button>
     return (
       <div style={{ paddingTop: 150 }}>
         <Grid container spacing={3}>
           <Grid container item xs={4} spacing={3}>   
-            {isCreator && openButton}
           </Grid>
           <Grid container item xs={4} spacing={3}>
             <Collapse in={open}>
@@ -300,15 +317,13 @@ class Channel extends React.Component {
           </Grid>
           <Grid container item xs={4} spacing={3}>
             <Grid container item xs={6} spacing={3}>
-              <Button variant='contained' color='primary' onClick={this.handleJoinSession}>
-                Connect
-              </Button>
+              {isCreator && openButton}
+
             </Grid>
 
             <Grid container item xs={6} spacing={3}>
-              <Button variant='contained' color='primary' onClick={this.handleLeaveSession}>
-                Close
-              </Button>
+              {!isConnected && connectButton}
+              {isConnected && leaveButton}
             </Grid>
           </Grid>
           <Grid container item xs={4} spacing={3}>

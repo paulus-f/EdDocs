@@ -26,7 +26,7 @@ class VideoChannelsController < ApplicationController
 
   def create_connection
     head :no_content
-    ActionCable.server.broadcast 'connection_channel', connection_params
+    ActionCable.server.broadcast "connection_channel_#{params[:video_channel_id]}", connection_params
   end
 
   private
