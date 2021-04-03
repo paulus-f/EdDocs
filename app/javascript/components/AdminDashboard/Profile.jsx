@@ -1,7 +1,6 @@
 import React from 'react';
 import Foindation from '../FoundationShow'
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Badge from '@material-ui/core/Badge';
@@ -12,18 +11,6 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import StarIcon from '@material-ui/icons/Star';
 
-
-const styles = theme => ({
-  root: {
-    justifyContent: 'center',
-    backgroundColor: theme.palette.background.paper,
-  },
-  paper: {
-    padding: theme.spacing.unit * 2,
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-  },
-})
 
 class Profile extends React.Component {
   constructor(props){
@@ -36,11 +23,10 @@ class Profile extends React.Component {
 
 
   render() {
-    const { classes } = this.props;
     const { current_user, typeUser } = this.state
 
     return (
-       <div className={classes.root}>
+       <div>
         <Grid container spacing={8} className='mt-4'>
           <Grid item xs={12} className='mb-5'>
             <Grid container spacing={8} justify="flex-start">
@@ -50,7 +36,7 @@ class Profile extends React.Component {
                 </div>
               </Grid>
               <Grid item xs={12} sm={6} md={6} lg={6}>
-                <List component="nav" className={classes.root}>
+                <List component="nav">
                   <ListItem button>
                     <ListItemIcon>
                       <StarIcon />
@@ -88,8 +74,4 @@ Profile.defaultProps = {
     ava: 'http://i.ru-phone.org/userfiles/walls/106/1067937/fhctkbyx.jpg'
 }
 
-Profile.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-export default withStyles(styles)(Profile);
+export default Profile;
