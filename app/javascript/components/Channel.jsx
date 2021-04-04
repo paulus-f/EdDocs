@@ -52,7 +52,7 @@ const Channel = (props) => {
   const roomID = props.videoChannel.id;
 
   useEffect(() => {
-      socketRef.current = io.connect(":8000/");
+      socketRef.current = io.connect("localhost:8081/");
       navigator.mediaDevices.getUserMedia({ video: videoConstraints, audio: true }).then(stream => {
           userVideo.current.srcObject = stream;
           socketRef.current.emit("join room", roomID);
