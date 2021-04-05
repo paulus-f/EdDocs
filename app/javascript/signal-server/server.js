@@ -7,7 +7,6 @@ const io = socket(server, {
 	cors: {
     origin: '*',
   }
-	//origins: ["http://localhost:3000"], 
 });
 
 const users = {};
@@ -31,7 +30,6 @@ io.on('connection', (socket) => {
 		}
 	});
 
-
 	socket.on('sendmsg', (data) => {
 		console.log(data);
 	});
@@ -40,7 +38,7 @@ io.on('connection', (socket) => {
 		console.log('join room');
 		if (users[roomID]) {
 			const length = users[roomID].length;
-			if (length === 4) {
+			if (length === 30) {
 				socket.emit("room full");
 				return;
 			}

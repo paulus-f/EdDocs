@@ -24,6 +24,15 @@ class VideoChannelsController < ApplicationController
     #no_permission unless @video_channel.user_has_access?(current_user.id)
   end
 
+  def change_connection_state
+    channel = VideoChannel.find(params[:video_channel_id])
+    state = channel.change_state
+
+    render json: {
+      isOpen: state
+    }
+  end
+
   def create_connection
     head :no_content
     ActionCable.server.broadcast "connection_channel_#{params[:video_channel_id]}", connection_params

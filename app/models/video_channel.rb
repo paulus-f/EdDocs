@@ -8,4 +8,9 @@ class VideoChannel < ApplicationRecord
     creator_id == user_id ||
       group.students.find_by(id: user_id).present?
   end
+
+  def change_state
+    update(open: !open)
+    !open
+  end
 end

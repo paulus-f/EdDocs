@@ -18,6 +18,7 @@ Rails.application.routes.draw do
 
   resources :video_channels do
     post '/create_connection', to: 'video_channels#create_connection'
+    post '/change_state', to: 'video_channels#change_connection_state'
   end
 
   resources :certificates do
