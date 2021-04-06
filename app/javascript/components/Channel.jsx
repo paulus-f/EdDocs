@@ -10,9 +10,13 @@ import Peer from 'simple-peer';
 import styled from 'styled-components';
 
 const ice = { iceServers: [{ urls: "stun:stun1.l.google.com:19302" }] };
+
 const JOIN_ROOM = 'JOIN_ROOM';
 const EXCHANGE = 'EXCHANGE';
 const REMOVE_USER = 'REMOVE_USER';
+const START_CONNECTION = 'START_CONNECTION';
+const CLOSE_CONNECTION = 'CLOSE_CONNECTION';
+
 const Container = styled.div`
     padding: 20px;
     display: flex;
@@ -141,7 +145,7 @@ class ChannelPage extends React.Component {
 			currentUser: props.currentUser,
 			isCreator: props.isCreator,
 			isOpenAlert: true,
-			isConnected: false,
+			isConnected: props.videoChannel.open,
 			token: Functions.getMetaContent("csrf-token"),
 		}
 
@@ -154,9 +158,11 @@ class ChannelPage extends React.Component {
 
 	componentDidMount() {
 		this.createConnection();
-		this.setState({
-			isConnected: this.state.videoChannel.open
-		})
+	}
+
+	componentWillUnmount() {
+		App.cable.disconnect();
+		navigator.getUserMedia.stop();
 	}
 
 	createConnection = () => {
@@ -186,6 +192,10 @@ class ChannelPage extends React.Component {
             return;
           case REMOVE_USER:
             return;
+					case START_CONNECTION:
+						return;
+					case CLOSE_CONNECTION:
+						return;
           default:
             return;
           }
@@ -195,6 +205,8 @@ class ChannelPage extends React.Component {
   };
 
 	handleOpenChannel = (e) => {
+		const { currentUser } = this.state;
+
 		const headers = new Headers({
       "content-type": "application/json",
 			"X-CSRF-TOKEN": this.state.token,
@@ -207,6 +219,11 @@ class ChannelPage extends React.Component {
 			.then(data =>{
 				this.setState({
 					isConnected: data.isOpen
+				});
+				const typeConnection = data.isOpen ? START_CONNECTION : CLOSE_CONNECTION;
+				this.broadcastData({
+					type: typeConnection,
+					from: currentUser.id,
 				});
 			});
 	}
@@ -238,7 +255,13 @@ class ChannelPage extends React.Component {
   logError = (error) => console.warn("Whoops! Error:", error);
 
 	studentMenu() {
-		return <h1> Waiting ... </h1>;
+		const {isConnected} = this.state;
+
+		if(isConnected) {
+			return <h1> To close connection you shoud close a tab.  </h1>;
+		} else {
+			return <h1> Waiting a starting connection...  </h1>;
+		}
 	};
 
 	creatorMenu() {
