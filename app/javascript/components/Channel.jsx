@@ -8,6 +8,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import io from 'socket.io-client';
 import Peer from 'simple-peer';
 import styled from 'styled-components';
+import ReactDOM from "react-dom";
 
 const ice = { iceServers: [{ urls: "stun:stun1.l.google.com:19302" }] };
 
@@ -137,6 +138,7 @@ const Channel = (props) => {
 };
 
 class ChannelPage extends React.Component {
+
 	constructor(props) {
 		super(props);
 
@@ -147,6 +149,7 @@ class ChannelPage extends React.Component {
 			isOpenAlert: true,
 			isConnected: props.videoChannel.open,
 			token: Functions.getMetaContent("csrf-token"),
+			channel: null
 		}
 
 		this.handleOpenChannel = this.handleOpenChannel.bind(this);
@@ -154,10 +157,17 @@ class ChannelPage extends React.Component {
 		this.broadcastData = this.broadcastData.bind(this);
 		this.logError = this.logError.bind(this);
 		this.createConnection = this.createConnection.bind(this);
+		this.channelRef = React.createRef();
 	}
 
 	componentDidMount() {
+		const { isConnected, videoChannel } = this.state;
 		this.createConnection();
+		if(isConnected) {
+			this.setState({
+				channel: <Channel ref={this.channelRef} videoChannel={videoChannel} isConnected={isConnected} />
+			})
+		}
 	}
 
 	componentWillUnmount() {
@@ -167,7 +177,6 @@ class ChannelPage extends React.Component {
 
 	createConnection = () => {
     let {currentUser, isConnected } = this.state;
-    this.setState({ isConnected: !isConnected });
 
     App.cable.subscriptions.create(
       {
@@ -205,8 +214,8 @@ class ChannelPage extends React.Component {
   };
 
 	handleOpenChannel = (e) => {
-		const { currentUser } = this.state;
-
+		const { currentUser , channel} = this.state;
+		const ref = this.channelRef
 		const headers = new Headers({
       "content-type": "application/json",
 			"X-CSRF-TOKEN": this.state.token,
@@ -217,10 +226,15 @@ class ChannelPage extends React.Component {
       headers,
     }).then(req => req.json())
 			.then(data =>{
-				this.setState({
-					isConnected: data.isOpen
-				});
 				const typeConnection = data.isOpen ? START_CONNECTION : CLOSE_CONNECTION;
+
+				if(!data.isOpen) {
+					//ReactDOM.unmountComponentAtNode(ReactDOM.findDOMNode(ref));
+				}
+				this.setState({
+					isConnected: data.isOpen,
+					channel: data.isOpen ? <Channel ref={this.channelRef} videoChannel={this.state.videoChannel} isConnected={data.isOpen} /> : null
+				});
 				this.broadcastData({
 					type: typeConnection,
 					from: currentUser.id,
@@ -279,7 +293,7 @@ class ChannelPage extends React.Component {
 			<Grid container spacing={3}>
 				<Grid container item xs={4} spacing={3}/>
 				<Grid container item xs={4} spacing={3}>
-					{ !isConnected && <h1> Open is to start a lesson </h1>}
+					{ !isConnected && <h1> Open button is to start a lesson </h1>}
 				</Grid>
 				<Grid container item xs={4} spacing={3}/>
 
@@ -296,13 +310,13 @@ class ChannelPage extends React.Component {
 	};
 
 	render() {
-		const { isConnected, videoChannel, isCreator } = this.state;
+		const { isConnected, videoChannel, isCreator, channel } = this.state;
 		const channelMenu = isCreator ? this.creatorMenu() : this.studentMenu();
 
 		return (
 			<div style={{ paddingTop: 150 }}>
 				{channelMenu}
-				{isConnected && <Channel videoChannel={videoChannel} isConnected={isConnected} />}	
+				{channel}	
 			</div>
 		);
 	}

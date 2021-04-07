@@ -11,6 +11,6 @@ class VideoChannel < ApplicationRecord
 
   def change_state
     update(open: !open)
-    !open
+    open
   end
 end
