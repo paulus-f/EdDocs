@@ -183,20 +183,6 @@ class PrimarySearchAppBar extends React.Component {
           </IconButton>
           <p>Messages</p>
         </MenuItem>
-        <MenuItem onClick={this.handleMobileMenuClose}>
-          <IconButton color="inherit">
-            <Badge badgeContent={0} color="secondary">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
-          <p>Notifications</p>
-        </MenuItem>
-        <MenuItem onClick={this.handleProfileMenuOpen}>
-          <IconButton color="inherit">
-            <AccountCircle />
-          </IconButton>
-          <p>Profile</p>
-        </MenuItem>
       </Menu>);
 
     return (
@@ -212,44 +198,10 @@ class PrimarySearchAppBar extends React.Component {
                 <a href="/">EdDocs</a>
               </div>
             </Typography>
-            <div className={classes.search}>
-              <div className={classes.searchIcon}>
-                <SearchIcon />
-              </div>
-              <InputBase
-                placeholder="Search…"
-                classes={{
-                  root: classes.inputRoot,
-                  input: classes.inputInput
-                }}
-              />
-            </div>
 
             <div className={classes.grow} />
             {this.checkAuth()}
-            <Support/>
-            
-
-            <div className={classes.sectionDesktop}>
-              <IconButton color="inherit">
-                <Badge badgeContent={0} color="secondary">
-                  <MailIcon />
-                </Badge>
-              </IconButton>
-                <IconButton
-                  aria-owns={isMenuOpen ? "material-appbar" : undefined}
-                  aria-haspopup="true"
-                  onClick={this.handleProfileMenuOpen}
-                  color="inherit">
-                  <AccountCircle />
-              </IconButton>
-            </div>
-            <div className={classes.sectionMobile}>
-              <IconButton aria-haspopup="true" onClick={this.handleMobileMenuOpen}
-                color="inherit">
-                <MoreIcon />
-              </IconButton>
-            </div>
+            <Support/>            
           </Toolbar>
         </AppBar>
         {renderMenu}

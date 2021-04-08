@@ -15,10 +15,6 @@ const socketToRoom = {};
 
 io.on('connection', (socket) => {
 	console.log('connected');
-	socket.on('test', (data) => {
-		console.log('test');
-		console.log(data);
-	});
 
 	socket.on('disconnect', () => {
 		console.log('disconnecting');
@@ -31,7 +27,7 @@ io.on('connection', (socket) => {
 	});
 
 	socket.on('sendmsg', (data) => {
-		console.log(data);
+		console.log(data)
 	});
 
 	socket.on("join room", roomID => {
