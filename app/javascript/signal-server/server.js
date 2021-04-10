@@ -24,14 +24,18 @@ io.on('connection', (socket) => {
 			room = room.filter(id => id !== socket.id);
 			users[roomID] = room;
 		}
+		io.emit("user exited", socket.id);
 	});
 
 	socket.on('sendmsg', (data) => {
 		console.log(data)
 	});
 
-	socket.on("join room", roomID => {
+	socket.on("join room", (roomID, userId, userEmail) => {
 		console.log('join room');
+		console.log(userId);
+		console.log(userEmail);
+
 		if (users[roomID]) {
 			const length = users[roomID].length;
 			if (length === 30) {
@@ -45,12 +49,20 @@ io.on('connection', (socket) => {
 		socketToRoom[socket.id] = roomID;
 		const usersInThisRoom = users[roomID].filter(id => id !== socket.id);
 
-		socket.emit("all users", usersInThisRoom);
+		socket.emit("all users", usersInThisRoom, userId, userEmail, socket.id);
 	});
 
-	socket.on("sending signal", payload => {
+	socket.on("sending signal", (payload) => {
 		console.log('sending signal');
-		io.to(payload.userToSignal).emit('user joined', { signal: payload.signal, callerID: payload.callerID });
+		console.log(payload.userId);
+		console.log(payload.userEmail);
+
+		io.to(payload.userToSignal)
+			.emit('user joined', 
+				{ signal: payload.signal, callerID: payload.callerID },
+				payload.userId,
+				payload.userEmail
+			);
 	});
 
 	socket.on("returning signal", payload => {

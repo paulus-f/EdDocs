@@ -20,6 +20,7 @@
     "notistack": "^0.4.2",
     "prop-types": "^15.6.2",
     "react": "^16.7.0",
+    "react-beforeunload": "^2.4.0",
     "react-canvas-draw": "^1.0.0",
     "react-dom": "^16.7.0",
     "react-paginate": "^6.3.0",
