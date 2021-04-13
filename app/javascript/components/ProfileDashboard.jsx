@@ -23,6 +23,7 @@ import FaceIcon from '@material-ui/icons/Face';
 import ChatIcon from '@material-ui/icons/Chat';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import BookmarkIcon from '@material-ui/icons/Bookmark';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Avatar from '@material-ui/core/Avatar';
@@ -30,6 +31,7 @@ import FoundationShow from './FoundationShow';
 import CoursesPanel from './ManagerDashboard/CoursesPanel';
 import VideoCallIcon from '@material-ui/icons/VideoCall'
 import ProfileCalls from './ProfileDashboard/ProfileCalls'
+import QuizContainer from './QuizContainer';
 import { Route, BrowserRouter, Switch } from 'react-router-dom';
 
 const styles = theme => ({
@@ -214,6 +216,11 @@ class ProfileDashboard extends React.Component {
           />
         });
         break;
+      case 'quiz':
+        this.setState({
+          point: <QuizContainer courses={this.props.courses} />
+        });
+        break;
       case 'calls':
         this.setState({
           point: <ProfileCalls currentUser={this.props.current_user}
@@ -277,6 +284,13 @@ class ProfileDashboard extends React.Component {
             <VideoCallIcon />
           </ListItemIcon>
           <ListItemText classes={{ primary: classes.primary }} inset primary="Calls" />
+        </MenuItem>
+
+        <MenuItem className={classes.menuItem} onClick={this.handleSelect} id='quiz'>
+          <ListItemIcon className={classes.icon}>
+            <BookmarkIcon />
+          </ListItemIcon>
+          <ListItemText classes={{ primary: classes.primary }} inset primary="Quiz" />
         </MenuItem>
 
       </div>;
