@@ -1,14 +1,10 @@
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import Collapse from '@material-ui/core/Collapse';
-import CloseIcon from '@material-ui/icons/Close';
 import Functions from '../utils/Functions'
 import React, { useEffect, useRef, useState } from 'react';
 import io from 'socket.io-client';
 import Peer from 'simple-peer';
 import styled from 'styled-components';
-import ReactDOM from "react-dom";
 import { useBeforeunload } from 'react-beforeunload';
 
 const ice = { iceServers: [{ urls: "stun:stun1.l.google.com:19302" }] };
@@ -298,7 +294,7 @@ class ChannelPage extends React.Component {
 		if(isConnected) {
 			return <h1> To close the connection you should close a tab.  </h1>;
 		} else {
-			return <h1> Waiting a connection... or The call was finished by the creator  </h1>;
+			return <h1> Waiting ... or the call was finished </h1>;
 		}
 	};
 

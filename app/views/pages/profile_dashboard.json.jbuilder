@@ -20,7 +20,7 @@ end
 if current_user.student?
   json.typeUser 'student'
   json.group current_user.group
-  unless current_user.group.nil?
+  if current_user.group
     json.students current_user.group.students.eager_load(:profile) do |student|
       json.profile student.profile
       json.id student.id
@@ -35,6 +35,16 @@ if current_user.student?
       json.description course.description
       json.level_id course.level_id
       json.image_url course.photo.url == 'notfound.png' ? asset_url(course.photo.url) : course.photo.url
+    end
+
+    json.channels current_user.group.video_channels do |channel|
+      json.id channel.id
+      json.name channel.name
+      json.open channel.open || false
+      json.creator_id channel.creator_id
+      json.group_id channel.group_id
+      json.conversation_id channel.conversation_id
+      json.course_id channel.course_id
     end
   end
 

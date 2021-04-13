@@ -26,7 +26,7 @@ import axios from 'axios';
 import ManagerCalls from './ManagerDashboard/ManagerCalls'
 import Reports from './ManagerDashboard/Reports'
 import Profile from './ManagerDashboard/Profile';
-import { Route, BrowserRouter, Link, Switch, Redirect, withRouter } from 'react-router-dom';
+import { Route, BrowserRouter, Switch } from 'react-router-dom';
 
 const styles = theme => ({
   menuItem: {

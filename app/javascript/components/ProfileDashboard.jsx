@@ -30,6 +30,7 @@ import FoundationShow from './FoundationShow';
 import CoursesPanel from './ManagerDashboard/CoursesPanel';
 import VideoCallIcon from '@material-ui/icons/VideoCall'
 import ProfileCalls from './ProfileDashboard/ProfileCalls'
+import { Route, BrowserRouter, Switch } from 'react-router-dom';
 
 const styles = theme => ({
   menuItem: {
@@ -43,7 +44,7 @@ const styles = theme => ({
   primary: {},
   icon: {},
 });
- 
+
 
 class ProfileDashboard extends React.Component {
   constructor(props) {
@@ -52,16 +53,16 @@ class ProfileDashboard extends React.Component {
       current_user: this.props.current_user,
       typeUser: this.props.typeUser,
       point: <Profile
-                foundationImage = {this.props.foundationImage} 
-                levels = {this.props.levels}
-                courses = {this.props.courses}
-                level = {this.props.level}
-                group = {this.props.group}
-                profile = { this.props.profile}
-                foundation = {this.props.foundation}
-                current_user = {this.props.current_user}
-                typeUser = {this.props.typeUser}
-              />,
+        foundationImage={this.props.foundationImage}
+        levels={this.props.levels}
+        courses={this.props.courses}
+        level={this.props.level}
+        group={this.props.group}
+        profile={this.props.profile}
+        foundation={this.props.foundation}
+        current_user={this.props.current_user}
+        typeUser={this.props.typeUser}
+      />,
       alertOpen: false,
       alertMessage: '',
       chatMessage: '',
@@ -78,12 +79,16 @@ class ProfileDashboard extends React.Component {
     this.createSocket();
   }
 
+  componentWillUnmount() {
+    App.cable.disconnect()
+  }
+
   createSocket() {
     App.notifications = App.cable.subscriptions.create({
       channel: 'NotificationsChannel',
       id: this.state.current_user.id
     }, {
-      connected: () => {},
+      connected: () => { },
       received: (data) => {
         console.log(data)
         this.setState({
@@ -109,27 +114,27 @@ class ProfileDashboard extends React.Component {
   };
 
   renderListStudent() {
-    if(!this.props.group) {
+    if (!this.props.group) {
       return (
         <h1>
           You haven't a group. Please contact to Support.
         </h1>
       );
     }
-    return(
-      <div style={{marginTop:20, marginLeft: 100}}>
+    return (
+      <div style={{ marginTop: 20, marginLeft: 100 }}>
         <h3>{this.props.group.name} of {this.props.level.name}:</h3>
         <List>
-          {this.props.students.map( student => (
-              <ListItem key={student.id}>
-                <ListItemAvatar>
-                  <Avatar>
-                    <FaceIcon />
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText
-                  primary={student.profile.last_name +" "+ student.profile.first_name}
-                />
+          {this.props.students.map(student => (
+            <ListItem key={student.id}>
+              <ListItemAvatar>
+                <Avatar>
+                  <FaceIcon />
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText
+                primary={student.profile.last_name + " " + student.profile.first_name}
+              />
             </ListItem>
           ))}
         </List>
@@ -142,32 +147,32 @@ class ProfileDashboard extends React.Component {
     e.stopPropagation();
     const id = e.target.offsetParent.id
     console.log(id);
-    switch(id) {
+    switch (id) {
       case 'myProfile':
         this.setState({
-          point:  <Profile
-                    courses = {this.props.courses}
-                    level = {this.props.level}
-                    group = {this.props.group}
-                    current_user={this.props.current_user}
-                    profile = { this.props.profile}
-                    typeUser = {this.props.typeUser}
-                    foundation = {this.props.foundation}
-                  />,
+          point: <Profile
+            courses={this.props.courses}
+            level={this.props.level}
+            group={this.props.group}
+            current_user={this.props.current_user}
+            profile={this.props.profile}
+            typeUser={this.props.typeUser}
+            foundation={this.props.foundation}
+          />,
         });
         break;
       case 'myChat':
         this.setState({
-          point: <Chat foundation={this.props.foundation}/>
+          point: <Chat foundation={this.props.foundation} />
         });
         break;
       case 'myCertificates':
         this.setState({
           point: <Certificates
-                    current_user = {this.props.current_user}
-                    profile = { this.props.profile}
-                    certificates = { this.props.certificates}
-                 />
+            current_user={this.props.current_user}
+            profile={this.props.profile}
+            certificates={this.props.certificates}
+          />
         });
         break;
       case 'myGroup':
@@ -178,136 +183,147 @@ class ProfileDashboard extends React.Component {
       case 'myChildren':
         this.setState({
           point: <Children
-              current_user = {this.props.current_user}
-              children = { this.props.children}
+            current_user={this.props.current_user}
+            children={this.props.children}
           />
         });
         break;
       case 'myFoundation':
-        this.setState({point: <FoundationShow
-                                foundationImage = {this.props.foundationImage} 
-                                levels = {this.props.levels}
-                                current_user = {this.props.current_user}
-                                foundation = {this.props.foundation}
-                                studentsCount={this.props.students_count}
-                                managersCount={this.props.managers_count}
-                              />});
+        this.setState({
+          point: <FoundationShow
+            foundationImage={this.props.foundationImage}
+            levels={this.props.levels}
+            current_user={this.props.current_user}
+            foundation={this.props.foundation}
+            studentsCount={this.props.students_count}
+            managersCount={this.props.managers_count}
+          />
+        });
         break;
       case 'myCourses':
-        this.setState({point: <CoursesPanel
-                                student={true}
-                                courses={this.props.courses}
-                                imageNotFound = {this.props.imageNotFound}
-                                levels = {this.props.levels}
-                                current_user = {this.props.current_user}
-                                foundation = {this.props.foundation}
-                                studentsCount={this.props.students_count}
-                                managersCount={this.props.managers_count}
-                              />});
+        this.setState({
+          point: <CoursesPanel
+            student={true}
+            courses={this.props.courses}
+            imageNotFound={this.props.imageNotFound}
+            levels={this.props.levels}
+            current_user={this.props.current_user}
+            foundation={this.props.foundation}
+            studentsCount={this.props.students_count}
+            managersCount={this.props.managers_count}
+          />
+        });
         break;
       case 'calls':
         this.setState({
-          point: <ProfileCalls/>
+          point: <ProfileCalls currentUser={this.props.current_user}
+            channels={this.props.channels || []} />
         });
-        break;  
+        break;
     }
-};
+  };
 
 
   ListItemComposition() {
     const { classes, typeUser } = this.props;
     var menu;
-    if(typeUser == 'parent') {
+    if (typeUser == 'parent') {
       menu = <MenuItem className={classes.menuItem} onClick={this.handleSelect} id='myChildren'>
-              <ListItemIcon className={classes.icon}>
-                <StatisticIcon/>
-              </ListItemIcon>
-              <ListItemText classes={{ primary: classes.primary }} inset primary="My Children"/>
-            </MenuItem>
+        <ListItemIcon className={classes.icon}>
+          <StatisticIcon />
+        </ListItemIcon>
+        <ListItemText classes={{ primary: classes.primary }} inset primary="My Children" />
+      </MenuItem>
     }
-    if(typeUser == 'student') {
-      menu = <div> 
-               <MenuItem className={classes.menuItem} onClick={this.handleSelect} id='myFoundation'>
-                 <ListItemIcon className={classes.icon}>
-                     <DomainIcon />
-                 </ListItemIcon>
-                 <ListItemText classes={{ primary: classes.primary }} inset primary="My Foundation"/>
-               </MenuItem>
-               
-               <MenuItem className={classes.menuItem} onClick={this.handleSelect} id='myGroup'>
-                 <ListItemIcon className={classes.icon}>
-                   <GroupIcon />
-                 </ListItemIcon>
-                 <ListItemText classes={{ primary: classes.primary }} inset primary="My Group"/>
-               </MenuItem>
- 
-               <MenuItem className={classes.menuItem} onClick={this.handleSelect} id='myCertificates'>
-                 <ListItemIcon className={classes.icon}>
-                   <SchoolIcon />
-                 </ListItemIcon>
-                 <ListItemText classes={{ primary: classes.primary }} inset primary="My Certificates"/>
-               </MenuItem>
- 
-               <MenuItem className={classes.menuItem} onClick={this.handleSelect} id='myChat'>
-                 <ListItemIcon className={classes.icon}>
-                   <ChatIcon />
-                 </ListItemIcon>
-                 <ListItemText classes={{ primary: classes.primary }} inset primary="Chat"/>
-               </MenuItem>
- 
-               <MenuItem className={classes.menuItem} onClick={this.handleSelect} id='myCourses'>
-                 <ListItemIcon className={classes.icon}>
-                   <BookIcon />
-                 </ListItemIcon>
-                 <ListItemText classes={{ primary: classes.primary }} inset primary="My Courses"/>
-               </MenuItem>
+    if (typeUser == 'student') {
+      menu = <div>
+        <MenuItem className={classes.menuItem} onClick={this.handleSelect} id='myFoundation'>
+          <ListItemIcon className={classes.icon}>
+            <DomainIcon />
+          </ListItemIcon>
+          <ListItemText classes={{ primary: classes.primary }} inset primary="My Foundation" />
+        </MenuItem>
 
-               <MenuItem className={classes.menuItem} onClick={this.handleSelect} id='calls'>
-                 <ListItemIcon className={classes.icon}>
-                   <VideoCallIcon />
-                 </ListItemIcon>
-                 <ListItemText classes={{ primary: classes.primary }} inset primary="Calls"/>
-               </MenuItem>
+        <MenuItem className={classes.menuItem} onClick={this.handleSelect} id='myGroup'>
+          <ListItemIcon className={classes.icon}>
+            <GroupIcon />
+          </ListItemIcon>
+          <ListItemText classes={{ primary: classes.primary }} inset primary="My Group" />
+        </MenuItem>
 
-             </div>;
-    } 
+        <MenuItem className={classes.menuItem} onClick={this.handleSelect} id='myCertificates'>
+          <ListItemIcon className={classes.icon}>
+            <SchoolIcon />
+          </ListItemIcon>
+          <ListItemText classes={{ primary: classes.primary }} inset primary="My Certificates" />
+        </MenuItem>
+
+        <MenuItem className={classes.menuItem} onClick={this.handleSelect} id='myChat'>
+          <ListItemIcon className={classes.icon}>
+            <ChatIcon />
+          </ListItemIcon>
+          <ListItemText classes={{ primary: classes.primary }} inset primary="Chat" />
+        </MenuItem>
+
+        <MenuItem className={classes.menuItem} onClick={this.handleSelect} id='myCourses'>
+          <ListItemIcon className={classes.icon}>
+            <BookIcon />
+          </ListItemIcon>
+          <ListItemText classes={{ primary: classes.primary }} inset primary="My Courses" />
+        </MenuItem>
+
+        <MenuItem className={classes.menuItem} onClick={this.handleSelect} id='calls'>
+          <ListItemIcon className={classes.icon}>
+            <VideoCallIcon />
+          </ListItemIcon>
+          <ListItemText classes={{ primary: classes.primary }} inset primary="Calls" />
+        </MenuItem>
+
+      </div>;
+    }
 
     return (
-        <div>
-          <MenuList onSelect={this.handleSelect}>
-            <MenuItem className={classes.menuItem} onClick={this.handleSelect} id='myProfile'>
-              <ListItemIcon className={classes.icon}>
-                <AccountCircleIcon />
-              </ListItemIcon>
-              <ListItemText classes={{ primary: classes.primary }} inset primary="My Profile" />
-            </MenuItem>
-            {menu}
-          </MenuList>
-        </div>
+      <div>
+        <MenuList onSelect={this.handleSelect}>
+          <MenuItem className={classes.menuItem} onClick={this.handleSelect} id='myProfile'>
+            <ListItemIcon className={classes.icon}>
+              <AccountCircleIcon />
+            </ListItemIcon>
+            <ListItemText classes={{ primary: classes.primary }} inset primary="My Profile" />
+          </MenuItem>
+          {menu}
+        </MenuList>
+      </div>
     );
   }
   render() {
     return (
-          <div className='form-row ManagerDashboard'>
-            <div>
-              <Snackbar
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'left',
-                }}
-                open={this.state.alertMessage}
-                autoHideDuration={2000}
-                onClose={this.handleClose}
-                message={<span id="message-id">{this.state.chatMessage}</span>}
-              />
+      <BrowserRouter>
+        <Switch>
+          <Route>
+            <div className='form-row ManagerDashboard'>
+              <div>
+                <Snackbar
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                  }}
+                  open={this.state.alertMessage}
+                  autoHideDuration={2000}
+                  onClose={this.handleClose}
+                  message={<span id="message-id">{this.state.chatMessage}</span>}
+                />
+              </div>
+              <div className="col-12 col-sm-12 col-md-4 col-lg-2 col-xl-2 MenuList">
+                {this.ListItemComposition()}
+              </div>
+              <div className="col-12 col-sm-12  col-md-7 col-lg-9 col-xs-12 col-xl-9">
+                {this.state.point}
+              </div>
             </div>
-            <div className="col-12 col-sm-12 col-md-4 col-lg-2 col-xl-2 MenuList">
-              {this.ListItemComposition()}
-            </div>
-            <div className="col-12 col-sm-12  col-md-7 col-lg-9 col-xs-12 col-xl-9">
-              { this.state.point }
-            </div>
-          </div>
+          </Route>
+        </Switch>
+      </BrowserRouter>
     )
   }
 }
