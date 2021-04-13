@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_25_215006) do
+ActiveRecord::Schema.define(version: 2021_04_13_214851) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -205,6 +205,47 @@ ActiveRecord::Schema.define(version: 2021_03_25_215006) do
     t.datetime "updated_at", null: false
     t.bigint "profile_id"
     t.index ["profile_id"], name: "index_questionnaires_on_profile_id"
+  end
+
+  create_table "quiz_asnwers", force: :cascade do |t|
+    t.string "input"
+    t.string "asnwer"
+    t.bigint "quiz_question_id"
+    t.bigint "quiz_results_id"
+    t.index ["quiz_question_id"], name: "index_quiz_asnwers_on_quiz_question_id"
+    t.index ["quiz_results_id"], name: "index_quiz_asnwers_on_quiz_results_id"
+  end
+
+  create_table "quiz_questions", force: :cascade do |t|
+    t.string "prompt"
+    t.boolean "quiz_type", default: false
+    t.string "a"
+    t.string "b"
+    t.string "c"
+    t.string "d"
+    t.string "input"
+    t.string "asnwer"
+    t.bigint "quiz_id"
+    t.index ["quiz_id"], name: "index_quiz_questions_on_quiz_id"
+  end
+
+  create_table "quiz_results", force: :cascade do |t|
+    t.float "result"
+    t.boolean "finished", default: false
+    t.bigint "quiz_id"
+    t.bigint "user_id"
+    t.index ["quiz_id"], name: "index_quiz_results_on_quiz_id"
+    t.index ["user_id"], name: "index_quiz_results_on_user_id"
+  end
+
+  create_table "quizzes", force: :cascade do |t|
+    t.string "name"
+    t.bigint "user_id"
+    t.bigint "course_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["course_id"], name: "index_quizzes_on_course_id"
+    t.index ["user_id"], name: "index_quizzes_on_user_id"
   end
 
   create_table "requests", force: :cascade do |t|
