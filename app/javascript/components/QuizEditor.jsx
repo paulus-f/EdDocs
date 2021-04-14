@@ -32,15 +32,25 @@ class QuizEditor extends React.Component {
       quizName: '',
       selectedQuizId: null,
       selectedQuiz: null,
-      selectedCourse: null,
-      quizQuistions: null,
+      selectedCourse: '',
+      quizQuestions: null,
       quizResults: null,
+      quizNewQuestion: {
+        prompt: '',
+        a: '',
+        b: '',
+        c: '',
+        d: '',
+        asnwer: ''
+      }
     };
     this.handleChange = this.handleChange.bind(this);
     this.updateName = this.updateName.bind(this);
     this.updateCourse = this.updateCourse.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChipClick = this.handleChipClick.bind(this);
+    this.handleQuizSubmit = this.handleQuizSubmit.bind(this);
+    this.handleQuizChange = this.handleQuizChange.bind(this);
   }
 
   updateCourse = (value) => {
@@ -89,7 +99,7 @@ class QuizEditor extends React.Component {
         this.setState({
           selectedQuizId: res.data.quiz.id,
           selectedQuiz: res.data.quiz,
-          quizQuistions: res.data.quiz_questions,
+          quizQuestions: res.data.quiz_questions,
           quizResults: res.data.quiz_results,
         });
       })
@@ -102,8 +112,112 @@ class QuizEditor extends React.Component {
       });
   }
 
-  renderNewQuestion = () => {
+  handleQuizSubmit = event => {
+    event.preventDefault();
+    const { quizNewQuestion, selectedQuizId } = this.state;
 
+    axios.post(`/quizzes/${selectedQuizId}/add_question`, {
+      quizNewQuestion,
+      authenticity_token: Functions.getMetaContent("csrf-token")
+    })
+      .then(res => {
+        console.log(res)
+      })
+  }
+
+  handleQuizChange = name => event => {
+    const { quizNewQuestion } = this.state;
+    quizNewQuestion[name] = event.target.value;
+    this.setState({
+      quizNewQuestion: quizNewQuestion,
+    });
+  }
+
+  renderNewQuestion = () => {
+    const { quizNewQuestion, } = this.state;
+    const { classes } = this.props;
+
+    return <Grid item>
+      <form className={classes.container} autoComplete="off" onSubmit={this.handleQuizSubmit} >
+        <FormControl component="fieldset" className={classes.formControl}>
+          <TextField
+            id="outlined-foundation-name"
+            label="Prompt"
+            required
+            fullWidth
+            name="prompt"
+            className={classes.textField}
+            margin="normal"
+            variant="outlined"
+            value={quizNewQuestion.prompt}
+            onChange={this.handleQuizChange('prompt')}
+          />
+          <TextField
+            id="outlined-foundation-address"
+            label="Option A"
+            required
+            value={quizNewQuestion.a}
+            name="A"
+            className={classes.textField}
+            fullWidth
+            margin="normal"
+            variant="outlined"
+            onChange={this.handleQuizChange('a')}
+          />
+          <TextField
+            id="outlined-foundation-address"
+            label="Option B"
+            required
+            value={quizNewQuestion.b}
+            name="B"
+            className={classes.textField}
+            fullWidth
+            margin="normal"
+            variant="outlined"
+            onChange={this.handleQuizChange('b')}
+          />
+          <TextField
+            id="outlined-foundation-address"
+            label="Option C"
+            required
+            value={quizNewQuestion.c}
+            name="C"
+            className={classes.textField}
+            fullWidth
+            margin="normal"
+            variant="outlined"
+            onChange={this.handleQuizChange('c')}
+          />
+          <TextField
+            id="outlined-foundation-address"
+            label="Option D"
+            required
+            value={quizNewQuestion.d}
+            name="D"
+            className={classes.textField}
+            fullWidth
+            margin="normal"
+            variant="outlined"
+            onChange={this.handleQuizChange('d')}
+          />
+          <TextField
+            id="outlined-foundation-address"
+            label="Answer"
+            required
+            value={quizNewQuestion.asnwer}
+            name="Asnwer"
+            className={classes.textField}
+            fullWidth
+            margin="normal"
+            variant="outlined"
+            onChange={this.handleQuizChange('asnwer')}
+          />
+          <Button type={"submit"} color="primary" aria-label="Add">
+            Add <AddIcon />
+          </Button>
+        </FormControl>
+      </form>
+    </Grid>
   }
 
   renderQuestions = () => {
@@ -111,7 +225,7 @@ class QuizEditor extends React.Component {
   }
 
   render() {
-    const { quizzes, quizName, courses, selectedQuiz, selectedQuizId, quizQuistions, quizResults } = this.state;
+    const { quizzes, quizName, courses, selectedQuiz, selectedQuizId, quizQuestions, quizResults } = this.state;
     const { classes } = this.props;
 
     return (

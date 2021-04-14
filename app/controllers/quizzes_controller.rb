@@ -8,6 +8,12 @@ class QuizzesController < ApplicationController
     render json: { quiz: quiz }, status: 200
   end
 
+  def add_question
+    quiz_question = QuizQuestion.create(quiz_question_params)
+
+    render json: { quiz_question: quiz_question }, status: 200
+  end
+
   def quiz_editor_data
     quiz = Quiz.includes(:quiz_questions, :quiz_results).find(params[:quiz_id])
     render json: { 
@@ -23,6 +29,10 @@ class QuizzesController < ApplicationController
   end
 
   private
+
+  def quiz_question_params
+    params.require(:quizNewQuestion).permit(:prompt, :a, :b, :c, :d, :asnwer).merge(quiz_id: params[:quiz_id])
+  end
 
   def no_permission
     render text: 'Not Found', status: '404'
