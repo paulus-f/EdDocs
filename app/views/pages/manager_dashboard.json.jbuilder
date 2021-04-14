@@ -74,6 +74,8 @@ json.studentsWithoutGroup @foundation.students.where(group_id: nil) do |student|
   json.id student.id
 end
 
+json.quizzes current_user.quizzes
+
 json.channels VideoChannel.where(creator_id: current_user.id) do |channel|
   json.id channel.id
   json.name channel.name

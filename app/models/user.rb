@@ -22,6 +22,8 @@ class User < ApplicationRecord
   has_many :conversations, foreign_key: :sender_id
   has_many :jwt_tokens, dependent: :destroy
   has_many :children, class_name: 'User', as: :parent, dependent: :nullify
+  has_many :quiz_results
+  has_many :quizzes
 
   belongs_to :foundation, optional: true
   belongs_to :group, optional: true

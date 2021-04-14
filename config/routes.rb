@@ -15,14 +15,16 @@ Rails.application.routes.draw do
   get '/manager_dashboard', to: 'pages#manager_dashboard'
 
   resources :profiles
+  resources :certificates
 
   resources :video_channels do
     post '/create_connection', to: 'video_channels#create_connection'
     post '/change_state', to: 'video_channels#change_connection_state'
   end
 
-  resources :certificates do
+  resources :quizzes do
   end
+
 
   devise_scope :user do
     post '/approve_users', to: 'registrations#approve_users'

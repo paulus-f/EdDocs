@@ -222,7 +222,9 @@ class ManagerDashboard extends React.Component {
         break;
       case 'quiz':
         this.setState({
-          point: <QuizEditor courses={this.state.courses} />
+          point: <QuizEditor courses={this.state.courses}
+            quizzes={this.props.quizzes}
+            levels={this.props.levels} />
         });
         break;
       case 'reports':
