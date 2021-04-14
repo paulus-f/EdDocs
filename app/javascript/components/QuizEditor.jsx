@@ -9,6 +9,7 @@ import { Button } from "@material-ui/core";
 import Functions from '../utils/Functions';
 import Chip from '@material-ui/core/Chip';
 import { withRouter, Link } from 'react-router-dom';
+import Grid from '@material-ui/core/Grid';
 
 const styles = theme => ({
   container: {
@@ -29,10 +30,11 @@ class QuizEditor extends React.Component {
       quizzes: props.quizzes,
       courses: props.courses,
       quizName: '',
+      selectedQuizId: null,
       selectedQuiz: null,
       selectedCourse: null,
-      selectedCall: null,
-      redirectToCall: false,
+      quizQuistions: null,
+      quizResults: null,
     };
     this.handleChange = this.handleChange.bind(this);
     this.updateName = this.updateName.bind(this);
@@ -80,13 +82,36 @@ class QuizEditor extends React.Component {
   };
 
   handleChipClick = id => {
-    this.setState({
-      selectedCall: id
-    });
+    axios.post(`/quizzes/${id}/quiz_editor_data`, {
+      authenticity_token: Functions.getMetaContent("csrf-token")
+    })
+      .then(res => {
+        this.setState({
+          selectedQuizId: res.data.quiz.id,
+          selectedQuiz: res.data.quiz,
+          quizQuistions: res.data.quiz_questions,
+          quizResults: res.data.quiz_results,
+        });
+      })
+      .catch(err => {
+        this.setState({
+          selectedQuizId: null,
+          selectedQuiz: null
+        });
+        console.log(err);
+      });
+  }
+
+  renderNewQuestion = () => {
+
+  }
+
+  renderQuestions = () => {
+
   }
 
   render() {
-    const { quizzes, quizName, courses, selectedQuiz } = this.state;
+    const { quizzes, quizName, courses, selectedQuiz, selectedQuizId, quizQuistions, quizResults } = this.state;
     const { classes } = this.props;
 
     return (
@@ -128,18 +153,19 @@ class QuizEditor extends React.Component {
         <div>
           {quizzes.map((quiz) => {
             return (
-              <Link target={"_blank"}
-                to={`/quizzes/${quiz.id}`}
-                activeClassName='active'>
-                <Chip key={quiz.id}
-                  label={quiz.name}
-                  clickable
-                  onClick={(e) => this.handleChipClick(quiz.id)}
-                  color='primary' />
-              </Link>
+              <Chip key={quiz.id}
+                label={quiz.name}
+                clickable
+                onClick={(e) => this.handleChipClick(quiz.id)}
+                color='primary' />
             );
           })}
         </div>
+        <br />
+        <Grid item xs={12} container justify="center" spacing={24}>
+          {selectedQuiz && this.renderNewQuestion()}
+          {selectedQuiz && this.renderQuestions()}
+        </Grid>
       </div>
     );
   }

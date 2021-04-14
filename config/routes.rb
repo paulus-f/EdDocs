@@ -23,6 +23,7 @@ Rails.application.routes.draw do
   end
 
   resources :quizzes do
+    post '/quiz_editor_data', to: 'quizzes#quiz_editor_data'
   end
 
 
