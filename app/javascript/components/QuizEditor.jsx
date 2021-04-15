@@ -63,6 +63,7 @@ class QuizEditor extends React.Component {
     this.handleChipClick = this.handleChipClick.bind(this);
     this.handleQuizSubmit = this.handleQuizSubmit.bind(this);
     this.handleQuizChange = this.handleQuizChange.bind(this);
+    this.renderResults = this.renderResults.bind(this);
   }
 
   updateCourse = (value) => {
@@ -267,6 +268,26 @@ class QuizEditor extends React.Component {
     });
   }
 
+  renderResults = () => {
+    const { classes } = this.props;
+    const { quizResults } = this.state;
+
+    return quizResults.map((result) => {
+      return <Grid key={result.id} xs item>
+        <Card className={classes.card}>
+          <CardContent>
+            <Typography component="h2">
+              User: {result.user.email}
+            </Typography>
+            <Typography variant='h6' component="h3">
+              Result: {result.result}
+            </Typography>
+          </CardContent>
+        </Card>
+      </Grid>
+    });
+  }
+
   render() {
     const { quizzes, quizName, courses, selectedQuiz, selectedQuizId, quizQuestions, quizResults } = this.state;
     const { classes } = this.props;
@@ -323,6 +344,7 @@ class QuizEditor extends React.Component {
         <Grid container spacing={3}>
           {selectedQuiz && this.renderNewQuestion()}
           {selectedQuiz && this.renderQuestions()}
+          {selectedQuiz && this.renderResults()}
         </Grid>
       </div>
     );
