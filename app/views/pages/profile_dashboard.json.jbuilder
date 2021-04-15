@@ -46,7 +46,7 @@ if current_user.student?
       json.conversation_id channel.conversation_id
       json.course_id channel.course_id
     end
-
+    json.quizResults QuizResult.where(user_id: current_user.id).as_json(include: :user)
     json.quizzes Quiz.where(course_id: current_user.group.level.courses.pluck(:id))
   end
 

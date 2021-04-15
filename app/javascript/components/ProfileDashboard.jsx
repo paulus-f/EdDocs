@@ -219,6 +219,7 @@ class ProfileDashboard extends React.Component {
       case 'quiz':
         this.setState({
           point: <QuizContainer quizzes={this.props.quizzes}
+            quizResults={this.props.quizResults}
             currentUser={this.props.current_user}
           />
         });
