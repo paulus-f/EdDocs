@@ -147,26 +147,19 @@ fieldset .Radio {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
-	input, button {
-		width: 300px;
-		height: 50px;
-		margin: 5px;
-		border: none;
-		border-radius: 5px;
-		font-size: 20px;
-	}	
 }
 
-.App .Menu .Quiz .EndScreen {
-	button:hover {
-		cursor: pointer;
-	}
+.Menu input, .Menu button, .Quiz button, .EndScreen button {
+  width: 300px;
+  height: 50px;
+  margin: 5px;
+  border: none;
+  border-radius: 5px;
+  font-size: 20px;
+}
 
-	h3 {
-		color: #ffffff;
-	
-	}
+.Menu button:hover, .Quiz button:hover, .EndScreen button:hover {
+  cursor: pointer;
 }
 
 .Quiz {
@@ -197,4 +190,8 @@ fieldset .Radio {
 
 #nextQuestion {
   width: 200px;
+}
+
+.Menu h3, .Quiz h3, .EndScreen h3 {
+  color: #ffffff;
 }

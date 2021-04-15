@@ -1,34 +1,10 @@
 import React, { useState, useContext, useEffect } from "react";
 import { TestStateContext } from "../context/context";
-const Questions = [
-  {
-    prompt: "What is my name?",
-    optionA: "John",
-    optionB: "Jake",
-    optionC: "Josh",
-    optionD: "Pedro",
-    asnwer: "optionD",
-  },
-  {
-    prompt: "Which of this is not a programming language?",
-    optionA: "Python",
-    optionB: "JavaScript",
-    optionC: "MC-03",
-    optionD: "Java",
-    asnwer: "optionC",
-  },
-  {
-    prompt: "Which of this is not a javascript framework?",
-    optionA: "React",
-    optionB: "Angular",
-    optionC: "Vue",
-    optionD: "Java",
-    asnwer: "optionD",
-  },
-];
+import axios from 'axios';
+import Functions from '../utils/Functions';
 
 const EndScreen = (props) => {
-  const { score, setScore, setTestState, userName } = useContext(
+  const { score, setScore, setTestState, userName, questions } = useContext(
     TestStateContext
   );
 
@@ -41,7 +17,7 @@ const EndScreen = (props) => {
       <h1>Quiz Finished</h1>
       <h3>{userName}</h3>
       <h1>
-        {score} / {Questions.length}
+        {score} / {questions.length}
       </h1>
       <button onClick={restartQuiz}>Restart Quiz</button>
     </div>
@@ -50,19 +26,13 @@ const EndScreen = (props) => {
 
 
 const Menu = (props) => {
-  const { testState, setTestState, userName, setUserName } = useContext(
+  const { testState, setTestState, userName, setUserName, quiz } = useContext(
     TestStateContext
   );
   return (
     <div className="Menu">
-      <label>Enter Your Name:</label>
-      <input
-        type="text"
-        placeholder="Ex. John Smith"
-        onChange={(event) => {
-          setUserName(event.target.value);
-        }}
-      />
+      <h2> {quiz.name} </h2>
+      <h3>Your: {userName} </h3>
       <button
         onClick={() => {
           setTestState("playing");
@@ -78,7 +48,7 @@ const Test = (props) => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [optionChosen, setOptionChosen] = useState("");
 
-  const { score, setScore, testState, setTestState } = useContext(
+  const { score, setScore, setTestState, questions, quiz } = useContext(
     TestStateContext
   );
 
@@ -87,54 +57,59 @@ const Test = (props) => {
   };
 
   const nextQuestion = () => {
-    if (Questions[currentQuestion].asnwer == optionChosen) {
+    if (questions[currentQuestion].asnwer == optionChosen) {
       setScore(score + 1);
     }
     setCurrentQuestion(currentQuestion + 1);
   };
 
   const finishQuiz = () => {
-    if (Questions[currentQuestion].asnwer == optionChosen) {
+    if (questions[currentQuestion].asnwer == optionChosen) {
       setScore(score + 1);
     }
+    axios.post(`/quizzes/${quiz.id}/save_result`, {
+      result: (score + 1 / questions.length) * 100,
+      authenticity_token: Functions.getMetaContent("csrf-token")
+    }).then(res => console.log(res))
+      .catch(err => console.log(err));
     setTestState("finished");
   };
 
   return (
     <div className="Quiz">
-      <h1>{Questions[currentQuestion].prompt}</h1>
+      <h1>{questions[currentQuestion].prompt}</h1>
       <div className="questions">
         <button
           onClick={() => {
-            chooseOption("optionA");
+            chooseOption("a");
           }}
         >
-          {Questions[currentQuestion].optionA}
+          {questions[currentQuestion].a}
         </button>
         <button
           onClick={() => {
-            chooseOption("optionB");
+            chooseOption("b");
           }}
         >
-          {Questions[currentQuestion].optionB}
+          {questions[currentQuestion].b}
         </button>
         <button
           onClick={() => {
-            chooseOption("optionC");
+            chooseOption("c");
           }}
         >
-          {Questions[currentQuestion].optionC}
+          {questions[currentQuestion].c}
         </button>
         <button
           onClick={() => {
-            chooseOption("optionD");
+            chooseOption("d");
           }}
         >
-          {Questions[currentQuestion].optionD}
+          {questions[currentQuestion].d}
         </button>
       </div>
 
-      {currentQuestion == Questions.length - 1 ? (
+      {currentQuestion == questions.length - 1 ? (
         <button onClick={finishQuiz} id="nextQuestion">
           Finish Quiz
         </button>
@@ -149,7 +124,10 @@ const Test = (props) => {
 
 const Quiz = (props) => {
   const [testState, setTestState] = useState("menu");
-  const [userName, setUserName] = useState("");
+  const [userName, setUserName] = useState(props.currentUser.email);
+  const [questions, setQuestions] = useState(props.quizQuestions);
+  const [quiz, setQuiz] = useState(props.quiz);
+
   const [score, setScore] = useState(0);
 
   return (
@@ -163,6 +141,8 @@ const Quiz = (props) => {
           setUserName,
           score,
           setScore,
+          questions,
+          quiz
         }}
       >
         {testState === "menu" && <Menu />}

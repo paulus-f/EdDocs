@@ -25,6 +25,7 @@ Rails.application.routes.draw do
   resources :quizzes do
     post '/quiz_editor_data', to: 'quizzes#quiz_editor_data'
     post '/add_question', to: 'quizzes#add_question'
+    post '/save_result', to: 'quizzes#save_result'
   end
 
 

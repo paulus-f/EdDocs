@@ -14,18 +14,25 @@ class QuizzesController < ApplicationController
     render json: { quiz_question: quiz_question }, status: 200
   end
 
+  def save_result
+    QuizResult.create(user: current_user,
+      quiz_id: params[:quiz_id],
+      finished: true, 
+      result: params[:result]
+    )
+  end
+
   def quiz_editor_data
     quiz = Quiz.includes(:quiz_questions, :quiz_results).find(params[:quiz_id])
     render json: { 
       quiz: quiz,
       quiz_questions: quiz&.quiz_questions,
-      quiz_results: quiz&.quiz_results
+      quiz_results: quiz&.quiz_results.as_json(include: :user)
     }, status: 200
   end
 
   def show
     @quiz = Quiz.find(params[:id])
-    #no_permission unless @video_channel.user_has_access?(current_user.id)
   end
 
   private
