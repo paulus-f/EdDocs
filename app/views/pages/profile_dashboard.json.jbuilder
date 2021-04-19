@@ -14,6 +14,8 @@ if current_user.parent?
   json.typeUser 'parent'
   json.children current_user.children do |child|
     json.child_profile child.profile
+    json.email child.email
+    json.id child.id
   end
 end
 

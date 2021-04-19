@@ -59,9 +59,10 @@ class PagesController < ApplicationController
   end
 
   def profile_registration_page
+    @children_profile = current_user.university_student? ? current_user.profile : current_user.children[0].profile
     render('registration_children', 
       locals: { 
-        profile: current_user.university_student? ? current_user.profile : current_user.children[0].profile 
+        profile: @children_profile 
       }
     )
   end

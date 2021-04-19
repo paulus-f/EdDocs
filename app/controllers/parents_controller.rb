@@ -4,7 +4,7 @@ class ParentsController < ApplicationController
   def edit
     @children_profile = get_child(params[:id])
     if @children_profile
-      render 'pages/enrollment_form'
+      render 'pages/enrollment_form', locals: { profile: @children_profile }
     else
       render 'pages/404'
     end
