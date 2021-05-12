@@ -18,7 +18,7 @@ class QuizContainer extends React.Component {
     super(props);
     this.state = {
       currentUser: props.currentUser,
-      quizzes: props.quizzes,
+      quizzes: props.quizzes || [],
       quizResults: props.quizResults || []
     };
 

@@ -68,7 +68,7 @@ class ManagerDashboardController < ApplicationController
           group.students << student if group
           student.update(approve: true)
           foundation.save 
-          group.save
+          group.save if group
         end
         redirect_to root_path
       end

@@ -5,7 +5,9 @@ class VideoChannel < ApplicationRecord
   belongs_to :course
 
   def user_has_access?(user_id)
-    creator_id == user_id ||
+    return false if user_id.nil?
+
+      creator_id == user_id ||
       group.students.find_by(id: user_id).present?
   end
 

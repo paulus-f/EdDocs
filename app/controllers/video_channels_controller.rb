@@ -21,7 +21,7 @@ class VideoChannelsController < ApplicationController
 
   def show
     @video_channel = VideoChannel.find(params[:id])
-    #no_permission unless @video_channel.user_has_access?(current_user.id)
+    permission_denied unless @video_channel.user_has_access?(current_user&.id)
   end
 
   def change_connection_state
@@ -40,7 +40,7 @@ class VideoChannelsController < ApplicationController
 
   private
 
-  def no_permission
+  def permission_denied
     render text: 'Not Found', status: '404'
   end
   
