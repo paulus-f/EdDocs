@@ -18,6 +18,7 @@ import Collapse from '@material-ui/core/Collapse';
 import red from '@material-ui/core/colors/red';
 import green from '@material-ui/core/colors/green';
 import orange from '@material-ui/core/colors/orange';
+import Grid from '@material-ui/core/Grid';
 
 const styles = theme => ({
   card: {
@@ -116,6 +117,25 @@ class Course extends React.Component {
               /> 
   }
 
+  renderQuizResults = () => {
+    const quizResults = this.state.course.quiz_results;
+
+    return quizResults.map((result) => {
+      return <Grid key={result.id} xs item>
+        <Card className={'card'}>
+          <CardContent>
+            <Typography component="h2">
+              User: {result.user.email}
+            </Typography>
+            <Typography variant='h6' component="h3">
+              Result: {result.result}
+            </Typography>
+          </CardContent>
+        </Card>
+      </Grid>
+    });
+  }
+
   render() {
     const { classes } = this.props;
     let actions = '';
@@ -168,6 +188,9 @@ class Course extends React.Component {
             <Typography component='h5' variant='h6'>Short Description:</Typography>
             <Typography paragraph>
               {descriptionParser(this.state.course.description)}
+            </Typography>
+            <Typography component='div'> 
+              {this.renderQuizResults()}
             </Typography>
           </CardContent>
         </Collapse>

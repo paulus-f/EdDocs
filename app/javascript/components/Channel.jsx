@@ -14,6 +14,8 @@ const START_CONNECTION = 'START_CONNECTION';
 const CLOSE_CONNECTION = 'CLOSE_CONNECTION';
 const EXIT_FROM_ROOM = 'EXIT_FROM_ROOM';
 
+const WEBSOCKET_HOST = 'localhost:8081/';
+
 const Container = styled.div`
     padding: 20px;
     display: flex;
@@ -65,7 +67,7 @@ const Channel = (props) => {
 
 	useEffect(() => {
 		if(isConnected) {
-			socketRef.current = io.connect("localhost:8081/");
+			socketRef.current = io.connect(WEBSOCKET_HOST);
 			navigator.mediaDevices.getUserMedia({ video: videoConstraints, audio: true }).then(stream => {
 				userVideo.current.srcObject = stream;
 				socketRef.current.emit("join room", roomID, currentUser.id, currentUser.email);
@@ -228,7 +230,6 @@ class ChannelPage extends React.Component {
         received: (data) => {
           console.log('received', data);
 
-          //if (data.from === currentUser.id) return;
           switch (data.type) {
           case JOIN_ROOM:
             return;

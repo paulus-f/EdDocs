@@ -67,6 +67,8 @@ json.courses @foundation.courses do |course|
   json.description course.description
   json.level_id course.level_id
   json.image_url asset_url(course.photo)
+  
+  json.quiz_results QuizResult.where(quiz_id: course.quizzes.ids).as_json(include: :user)
 end
 
 json.studentsWithoutGroup @foundation.students.where(group_id: nil) do |student|

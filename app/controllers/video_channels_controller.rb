@@ -41,7 +41,7 @@ class VideoChannelsController < ApplicationController
   private
 
   def permission_denied
-    render text: 'Not Found', status: '404'
+    redirect_to root_url, alert: 'Permission Denied'
   end
   
   def connection_params
