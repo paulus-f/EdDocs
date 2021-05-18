@@ -38,7 +38,7 @@ if current_user.student?
       json.level_id course.level_id
       json.image_url course.photo.url == 'notfound.png' ? asset_url(course.photo.url) : course.photo.url
 
-      json.quiz_results QuizResult.where(quiz_id: course.quizzes.ids).as_json(include: :user)
+      json.quiz_results QuizResult.where(quiz_id: course.quizzes.ids, user_id: current_user.id).as_json(include: :user)
     end
 
     json.channels current_user.group.video_channels do |channel|
