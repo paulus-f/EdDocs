@@ -64,11 +64,13 @@ const Test = (props) => {
   };
 
   const finishQuiz = () => {
+    let result = score
     if (questions[currentQuestion].asnwer == optionChosen) {
-      setScore(score + 1);
+      result = score + 1;
+      setScore(result);
     }
     axios.post(`/quizzes/${quiz.id}/save_result`, {
-      result: (score + 1 / questions.length) * 100,
+      result: (result / questions.length) * 100.0,
       authenticity_token: Functions.getMetaContent("csrf-token")
     }).then(res => console.log(res))
       .catch(err => console.log(err));
