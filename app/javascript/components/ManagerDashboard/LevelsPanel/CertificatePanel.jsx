@@ -48,7 +48,8 @@ function getSorting(order, orderBy) {
 
 const rows = [
   { id: 'student', numeric: false, disablePadding: true, label: 'Student' },
-  { id: 'certificate', numeric: false, disablePadding: false, label: 'Certificate' }
+  { id: 'certificate', numeric: false, disablePadding: false, label: 'Certificate' },
+  { id: 'studentResult', numeric: false, disablePadding: false, label: 'Average Quiz Result' }
 ];
 
 class EnhancedTableHead extends React.Component {
@@ -64,11 +65,11 @@ class EnhancedTableHead extends React.Component {
       <TableHead>
         <TableRow>
           <TableCell padding="checkbox">
-            <Checkbox
+            {/* <Checkbox
               indeterminate={numSelected > 0 && numSelected < rowCount}
               checked={numSelected === rowCount}
               onChange={onSelectAllClick}
-            />
+            /> */}
           </TableCell>
           {rows.map(
             row => (
@@ -236,7 +237,7 @@ class CertificatePanel extends React.Component {
   };
 
   checkCerificate = (student, isSelected) => {
-    if(student.certificates.length == 0) {
+    if(student.canAddCertificate == 0) {
       return <TableCell padding="checkbox">
               <Checkbox checked={isSelected} />
             </TableCell>
@@ -349,6 +350,7 @@ class CertificatePanel extends React.Component {
                         {student.profile.first_name} {student.profile.last_name} 
                       </TableCell>
                       <TableCell align="center"> + </TableCell>
+                      <TableCell align="center"> {student.avg_quiz_result} </TableCell>
                     </TableRow>
                   );
                 })}

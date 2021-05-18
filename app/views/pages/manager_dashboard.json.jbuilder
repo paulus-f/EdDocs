@@ -18,6 +18,8 @@ json.levels @foundation.levels.eager_load(:courses, :groups) do |level|
     json.students group.students.eager_load(:profile) do |student|
       json.profile student.profile
       json.id student.id
+      json.areAddCertificates student.can_add_certificates?
+      json.avg_quiz_result student.avg_quiz_result
       json.certificates student.profile.certificates
     end
   end

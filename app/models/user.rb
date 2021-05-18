@@ -49,6 +49,14 @@ class User < ApplicationRecord
     student? && foundation&.type_foundation == 'university' && parent.nil?
   end
 
+  def can_add_certificates?
+    profile.certificates.empty? && avg_quiz_result >= Quiz::ACCESS_TO_CERTIFICATE
+  end
+
+  def avg_quiz_result
+    quiz_results.sum(:result) / quiz_results.length
+  end
+
   def create_profile
     create_profile!
   end
